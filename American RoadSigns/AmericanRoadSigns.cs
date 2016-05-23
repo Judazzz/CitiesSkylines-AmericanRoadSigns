@@ -106,7 +106,7 @@ namespace AmericanRoadSigns
             {
                 if (mod.AsUInt64 == Mod.workshop_id)
                 {
-                    workshopPath = Steam.workshop.GetSubscribedItemPath(mod);
+                    workshopPath = Steam.workshop.GetSubscribedItemPath(mod) + "\\Assets";
                     break;
                 }
             }
