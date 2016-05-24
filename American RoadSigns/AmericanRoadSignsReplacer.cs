@@ -26,7 +26,7 @@ namespace AmericanRoadSigns
         public static void FindProps()
         {
             // Get replacement prop name mapping
-            Dictionary<string, string> propsToLoad = new Dictionary<string, string>(PropConsts.AMERICAN_ROAD_PROPS);
+            List<KeyValuePair<string, string>> propsToLoad = new List<KeyValuePair<string, string>>(PropConsts.AMERICAN_ROAD_PROPS);
 
             for (int i = 0; i < PrefabCollection<PropInfo>.LoadedCount(); i++)
             {
@@ -35,11 +35,11 @@ namespace AmericanRoadSigns
                 // Check to see if the prop has been found
                 for(int j =0; j< propsToLoad.Count; j++ ) 
                 {
-                    var propToLoad = propsToLoad.ElementAt(j);
+                    var propToLoad = propsToLoad[j];
                     if (propName.Contains(propToLoad.Value))
                     {
                         propReplacementDict[propToLoad.Key] = PrefabCollection<PropInfo>.GetLoaded((uint)i);
-                        propsToLoad.Remove(propToLoad.Key);
+                        propsToLoad.Remove(propToLoad);
                         if (config.enable_debug)
                         {
                             DebugUtils.Log(String.Format("{0} found", propToLoad.Value));
