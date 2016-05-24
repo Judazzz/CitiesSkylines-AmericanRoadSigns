@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AmericanRoadSigns
 {
-    class DebugUtils
+    public class DebugUtils
     {
         public const string modPrefix = "[American RoadSigns " + Mod.version + "] ";
 
