@@ -60,45 +60,47 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\motorway-overroad-signs-motorway-overroad-signs-aci.dds">
+    <Content Include="Assets\PreviewImage.Source.png" />
+    <Content Include="Assets\WorkshopDescription.txt" />
+    <Content Include="motorway-overroad-signs-motorway-overroad-signs-aci.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\motorway-overroad-signs-motorway-overroad-signs-xys.dds">
+    <Content Include="motorway-overroad-signs-motorway-overroad-signs-xys.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\motorway-overroad-signs.dds">
+    <Content Include="motorway-overroad-signs.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\street-name-sign.dds">
+    <Content Include="street-name-sign.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\speed limit 15.crp">
+    <None Include="speed limit 15.crp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\speed limit 25.crp">
+    <None Include="speed limit 25.crp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\speed limit 30.crp">
+    <None Include="speed limit 30.crp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\speed limit 45.crp">
+    <None Include="speed limit 45.crp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\speed limit 65.crp">
+    <None Include="speed limit 65.crp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\us interstate sign.crp">
+    <None Include="us interstate sign.crp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\us no left turn.crp">
+    <None Include="us no left turn.crp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\us no parking.crp">
+    <None Include="us no parking.crp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\us no right turn.crp">
+    <None Include="us no right turn.crp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

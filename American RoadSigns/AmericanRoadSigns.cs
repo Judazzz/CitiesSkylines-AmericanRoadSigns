@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 using System.Diagnostics;
+using ColossalFramework.Plugins;
 
 namespace AmericanRoadSigns
 {
     public class Mod : IUserMod
     {
         public const UInt64 workshop_id = 690066392;
-        public const string version = "1.0.0";
+        public const string version = "1.0.1";
 
         public string Name
         {
@@ -31,9 +32,17 @@ namespace AmericanRoadSigns
             AmericanRoadSigns.SaveConfig();
         }
 
+        private void EventEnableLocalAssets(bool c)
+        {
+            AmericanRoadSigns.config.enable_localassets = c;
+            AmericanRoadSigns.SaveConfig();
+        }
+
         public void OnSettingsUI(UIHelperBase helper)
         {
-            AmericanRoadSigns.config = Configuration.Deserialize(AmericanRoadSigns.configPath);
+            var activeConfigPath = (PluginManager.noWorkshop) ? AmericanRoadSigns.configPathLocal : AmericanRoadSigns.configPath;
+            AmericanRoadSigns.config = Configuration.Deserialize(activeConfigPath);
+            //  
             bool flag = AmericanRoadSigns.config == null;
             if (flag)
             {
@@ -41,10 +50,12 @@ namespace AmericanRoadSigns
             }
             AmericanRoadSigns.SaveConfig();
 
-
+            //  Mod options:
             UIHelperBase group = helper.AddGroup(Name);
             group.AddSpace(10);
-            group.AddCheckbox("Write data to debug log", AmericanRoadSigns.config.enable_debug, new OnCheckChanged(EventEnableDebug));
+            group.AddCheckbox("Load dependencies from local mod folder, if present.", AmericanRoadSigns.config.enable_localassets, new OnCheckChanged(EventEnableLocalAssets));
+            group.AddSpace(20);
+            group.AddCheckbox("Write data to debug log.", AmericanRoadSigns.config.enable_debug, new OnCheckChanged(EventEnableDebug));
             group.AddSpace(10);
             group.AddGroup("WARNING: enabling debug data may increase loading times considerably!\nEnable this setting is only recommended when you experience problems with this mod.");
             group.AddSpace(20);
@@ -53,10 +64,7 @@ namespace AmericanRoadSigns
 
     public class Configuration
     {
-        public bool disable_optional_arrows = true;
-        public bool use_alternate_pavement_texture = false;
-        public bool use_cracked_roads = false;
-        public float crackIntensity = 1f;
+        public bool enable_localassets = false;
         public bool enable_debug = false;
 
         public void OnPreSerialize()
@@ -99,41 +107,73 @@ namespace AmericanRoadSigns
 
     public class ModLoader : LoadingExtensionBase
     {
+        public static string[] _dependencies = new string[] {
+            "motorway-overroad-signs.dds",
+            "motorway-overroad-signs-motorway-overroad-signs-aci.dds",
+            "motorway-overroad-signs-motorway-overroad-signs-xys.dds",
+            "street-name-sign.dds",
+            "speed limit 15.crp",
+            "speed limit 25.crp",
+            "speed limit 30.crp",
+            "speed limit 45.crp",
+            "speed limit 65.crp",
+            "us interstate sign.crp",
+            "us no left turn.crp",
+            "us no right turn.crp",
+            "us no parking.crp"
+        };
+
         public static string getModPath()
         {
             string workshopPath = ".";
+            //  Use local assets:
+            if (AmericanRoadSigns.config.enable_localassets)
+            {
+                string localPath = DataLocation.modsPath + "\\American RoadSigns";
+                //DebugUtils.Log($"Mod path: {localPath}.");
+                if (Directory.Exists(localPath))
+                {
+                    if (DependenciesPresent(true, localPath))
+                    {
+                        DebugUtils.Log($"Load included props and textures from local mod folder ({localPath}).");
+                        return localPath;
+                    }
+                    else
+                    {
+                        DebugUtils.Log("Not all included props and textures found in local mod folder: retrying to load from Workshop folder.");
+                    }
+                }
+            }
+            //  Use included assets:
             foreach (PublishedFileId mod in Steam.workshop.GetSubscribedItems())
             {
                 if (mod.AsUInt64 == Mod.workshop_id)
                 {
-                    workshopPath = Steam.workshop.GetSubscribedItemPath(mod) + "\\Assets";
+                    workshopPath = Steam.workshop.GetSubscribedItemPath(mod);
+                    DebugUtils.Log($"Mod path: {workshopPath}.");
+                    DependenciesPresent(false, workshopPath);
                     break;
                 }
             }
-            string localPath = DataLocation.modsPath + "\\American RoadSigns\\Assets";
-            if (Directory.Exists(localPath))
-            {
-                workshopPath = localPath;
-            }
-            //DebugUtils.Log($"workPath: {workshopPath}");
+            DebugUtils.Log($"Load included props and textures from Workshop folder ({workshopPath}).");
             return workshopPath;
         }
 
         public override void OnLevelLoaded(LoadMode mode)
         {
-            AmericanRoadSigns.config = Configuration.Deserialize(AmericanRoadSigns.configPath);
+            var activeConfigPath = (PluginManager.noWorkshop) ? AmericanRoadSigns.configPathLocal : AmericanRoadSigns.configPath;
+            AmericanRoadSigns.config = Configuration.Deserialize(activeConfigPath);
             if (AmericanRoadSigns.config == null)
             {
                 AmericanRoadSigns.config = new Configuration();
             }
             AmericanRoadSigns.SaveConfig();
-
+            //  
             string path = getModPath();
-
             AmericanRoadSigns.FindProps();
             AmericanRoadSigns.ReplaceProps();
             AmericanRoadSigns.ChangeProps(path);
-
+            //  
             base.OnLevelLoaded(mode);
         }
 
@@ -141,12 +181,41 @@ namespace AmericanRoadSigns
         {
             base.OnLevelUnloading();
         }
+
+        public static bool DependenciesPresent(bool isLocal, string path)
+        {
+            bool dependenciesPresent = true;
+            string fileLocation = (isLocal) ? "Local" : "Workshop";
+            foreach (var dependency in _dependencies)
+            {
+                if (File.Exists(path + "\\" + dependency))
+                {
+                    DebugUtils.Log($"Custom '{dependency}' found in {fileLocation} folder '{path}'.");
+                }
+                else
+                {
+                    DebugUtils.Log($"Custom '{dependency}' NOT found in {fileLocation} folder '{path}'.");
+                    dependenciesPresent = false;
+                }
+            }
+            //  
+            if (dependenciesPresent)
+            {
+                DebugUtils.Log($"All included props and textures found in {fileLocation} folder.");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     public class AmericanRoadSigns : MonoBehaviour
     {
         public static Configuration config;
         public static readonly string configPath = "CSL_AmericanRoadSigns.xml";
+        public static readonly string configPathLocal = "CSL_AmericanRoadSigns_local.xml";
 
         static PropInfo sl15 = new PropInfo();
         static PropInfo sl25 = new PropInfo();
@@ -166,7 +235,8 @@ namespace AmericanRoadSigns
 
         public static void SaveConfig()
         {
-            Configuration.Serialize(configPath, config);
+            var activeConfigPath = (PluginManager.noWorkshop) ? configPathLocal : configPath;
+            Configuration.Serialize(activeConfigPath, config);
         }
 
         public static Texture2D LoadTextureDDS(string texturePath)
@@ -200,46 +270,26 @@ namespace AmericanRoadSigns
                 {
                     sl65 = PrefabCollection<PropInfo>.GetLoaded((uint)i);
                     slpropsfound++;
-                    if (config.enable_debug)
-                    {
-                        DebugUtils.Log("Custom 'Speed limit 65' found.");
-                    }
                 }
                 else if (propName.Contains("speed limit 45"))
                 {
                     sl45 = PrefabCollection<PropInfo>.GetLoaded((uint)i);
                     slpropsfound++;
-                    if (config.enable_debug)
-                    {
-                        DebugUtils.Log("Custom 'Speed limit 45' found.");
-                    }
                 }
                 else if (propName.Contains("speed limit 30"))
                 {
                     sl30 = PrefabCollection<PropInfo>.GetLoaded((uint)i);
                     slpropsfound++;
-                    if (config.enable_debug)
-                    {
-                        DebugUtils.Log("Custom 'Speed limit 30' found.");
-                    }
                 }
                 else if (propName.Contains("speed limit 25"))
                 {
                     sl25 = PrefabCollection<PropInfo>.GetLoaded((uint)i);
                     slpropsfound++;
-                    if (config.enable_debug)
-                    {
-                        DebugUtils.Log("Custom 'Speed limit 25' found.");
-                    }
                 }
                 else if (propName.Contains("speed limit 15"))
                 {
                     sl15 = PrefabCollection<PropInfo>.GetLoaded((uint)i);
                     slpropsfound++;
-                    if (config.enable_debug)
-                    {
-                        DebugUtils.Log("Custom 'Speed limit 15' found.");
-                    }
                 }
 
                 else if (propName.Contains("us interstate sign"))
@@ -256,34 +306,18 @@ namespace AmericanRoadSigns
                 {
                     left_turn = PrefabCollection<PropInfo>.GetLoaded((uint)i);
                     turnsignpropsfound++;
-                    if (config.enable_debug)
-                    {
-                        DebugUtils.Log("Custom 'No left turn' sign found.");
-                    }
                 }
                 else if (propName.Contains("us no right turn"))
                 {
                     right_turn = PrefabCollection<PropInfo>.GetLoaded((uint)i);
                     turnsignpropsfound++;
-                    if (config.enable_debug)
-                    {
-                        DebugUtils.Log("Custom 'No right turn' sign found.");
-                    }
                 }
 
                 else if (PrefabCollection<PropInfo>.GetLoaded((uint)i).name.ToLower().Contains("us no parking"))
                 {
                     parkingsign = PrefabCollection<PropInfo>.GetLoaded((uint)i);
                     parkingsignpropfound = true;
-                    if (config.enable_debug)
-                    {
-                        DebugUtils.Log("Custom 'No parking' sign found.");
-                    }
                 }
-            }
-            if (slpropsfound >= 5 && motorwaypropfound && turnsignpropsfound >= 2 && parkingsignpropfound)
-            {
-                DebugUtils.Log("All custom props found.");
             }
         }
 
@@ -315,7 +349,6 @@ namespace AmericanRoadSigns
                                         PropInfo testprop = new PropInfo();
 
                                         bool changeprop = false;
-
                                         string propName = pr.name.ToLower();
 
                                         if (propName.Contains("speed limit") && slpropsfound >= 5)
@@ -325,46 +358,26 @@ namespace AmericanRoadSigns
                                             {
                                                 testprop = sl15;
                                                 changeprop = true;
-                                                if (config.enable_debug)
-                                                {
-                                                    DebugUtils.Log("Vanilla 'Speed limit 30' sign found.");
-                                                }
                                             }
                                             else if (propName.Contains("40"))
                                             {
                                                 testprop = sl25;
                                                 changeprop = true;
-                                                if (config.enable_debug)
-                                                {
-                                                    DebugUtils.Log("Vanilla 'Speed limit 40' sign found.");
-                                                }
                                             }
                                             else if (propName.Contains("50"))
                                             {
                                                 testprop = sl30;
                                                 changeprop = true;
-                                                if (config.enable_debug)
-                                                {
-                                                    DebugUtils.Log("Vanilla 'Speed limit 50' sign found.");
-                                                }
                                             }
                                             else if (propName.Contains("60"))
                                             {
                                                 testprop = sl45;
                                                 changeprop = true;
-                                                if (config.enable_debug)
-                                                {
-                                                    DebugUtils.Log("Vanilla 'Speed limit 60' sign found.");
-                                                }
                                             }
                                             else if (propName.Contains("100"))
                                             {
                                                 testprop = sl65;
                                                 changeprop = true;
-                                                if (config.enable_debug)
-                                                {
-                                                    DebugUtils.Log("Vanilla 'Speed limit 100' sign found.");
-                                                }
                                             }
                                         }
                                         else if (propName.Contains("motorway sign") && motorwaypropfound)
@@ -378,35 +391,19 @@ namespace AmericanRoadSigns
                                             {
                                                 testprop = left_turn;
                                                 changeprop = true;
-                                                if (config.enable_debug)
-                                                {
-                                                    DebugUtils.Log("Vanilla 'No left turn' sign found.");
-                                                }
                                             }
                                             else if (propName.Contains("no right turn sign"))
                                             {
                                                 testprop = right_turn;
                                                 changeprop = true;
-                                                if (config.enable_debug)
-                                                {
-                                                    DebugUtils.Log("Vanilla 'No right turn' sign found.");
-                                                }
                                             }
                                         }
                                         else if (propName.Contains("no parking sign") && parkingsignpropfound)
                                         {
                                             testprop = parkingsign;
                                             changeprop = true;
-                                            if (config.enable_debug)
-                                            {
-                                                DebugUtils.Log("Vanilla 'No Parking' sign found.");
-                                            }
                                         }
 
-                                        if (config.enable_debug)
-                                        {
-                                            DebugUtils.Log($"American RoadSigns: {pr.name} => changeprop = {changeprop}.");
-                                        }
                                         if (changeprop)
                                         {
                                             pr.m_mesh = testprop.m_mesh;
@@ -465,16 +462,12 @@ namespace AmericanRoadSigns
                                             //  
                                             if (config.enable_debug)
                                             {
-                                                DebugUtils.Log($"{propName} replacement succesful.");
+                                                DebugUtils.Log($"[DEBUG] - {propName} replacement succesful.");
                                             }
                                         }
                                         else
                                         {
                                             //  
-                                            if (config.enable_debug)
-                                            {
-                                                DebugUtils.Log($"{propName} replacement unsuccesful.");
-                                            }
                                         }
                                     }
 
@@ -523,8 +516,8 @@ namespace AmericanRoadSigns
                     }
                 }
             }
-            DebugUtils.Log("Motorway overhead sign props replaced succesfully.");
-            DebugUtils.Log("Street name sign props replaced succesfully.");
+            DebugUtils.Log("Motorway overhead sign props retextured succesfully.");
+            DebugUtils.Log("Street name sign props retextured succesfully.");
 
             //var net_collections = FindObjectsOfType<NetCollection>();
             //try
