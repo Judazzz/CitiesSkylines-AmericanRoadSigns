@@ -14,7 +14,7 @@ namespace AmericanRoadSigns
     public class Mod : IUserMod
     {
         public const UInt64 workshop_id = 690066392;
-        public const string version = "1.0.1";
+        public const string version = "1.0.2";
 
         public string Name
         {
@@ -87,24 +87,18 @@ namespace AmericanRoadSigns
             group.AddSpace(10);
             //  Select Options:
             group.AddDropdown("Highway overhead gantries", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_highwaygantry, OnHighwayGantryChanged);
-            group.AddSpace(5);
             group.AddDropdown("'Highway' signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_highwaysign, OnHighwaySignChanged);
-            group.AddSpace(5);
             group.AddDropdown("'No parking' signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_noparking, OnNoParkingChanged);
-            group.AddSpace(5);
             group.AddDropdown("No left/right turn' signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_noturnings, OnNoTurningChanged);
-            group.AddSpace(5);
             group.AddDropdown("Speed limit signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_speedlimits, OnSpeedLimitChanged);
-            group.AddSpace(5);
             group.AddDropdown("Streetname signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_streetname, OnStreetNameChanged);
             group.AddSpace(20);
             //  Toggle Options:
             group.AddCheckbox("Load dependencies from local mod folder, if present.", AmericanRoadSigns.config.enable_localassets, new OnCheckChanged(EventEnableLocalAssets));
-            group.AddSpace(20);
+            group.AddSpace(10);
             group.AddCheckbox("Write data to debug log.", AmericanRoadSigns.config.enable_debug, new OnCheckChanged(EventEnableDebug));
             group.AddSpace(10);
             group.AddGroup("WARNING: enabling debug data may increase loading times considerably!\nEnable this setting is only recommended when you experience problems with this mod.");
-            group.AddSpace(20);
         }
     }
 

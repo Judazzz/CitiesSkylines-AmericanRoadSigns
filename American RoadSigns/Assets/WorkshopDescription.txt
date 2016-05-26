@@ -13,14 +13,17 @@ Other than that I haven't noticed any incompatibilities: if you do, please repor
 [h1]Thank you[/h1]
 [quote]It can't be stressed enough that full credit goes out to [url=http://steamcommunity.com/id/hyperdrive_engage/myworkshopfiles/?appid=255710][b]hyperdrive_engage[/b][/url], who unfortunately no longer seems to be creating content for Cities: Skylines. He is the one wrote the source code and created the props - I merely stripped all unnecessary code, optimized a few bits here and there and included some additional debug functionality.[/quote]
 
-
 [b]Source:[/b] [url=https://github.com/Judazzz/CitiesSkylines-UltimateEyecandy]Github[/url]
 
 
+[h1]Updates[/h1]
+[quote][b][i]May 26th, 2016 - v1.0.2[/i][/b]
+Update 1.0.2 adds a 'render mode' setting for each prop: American, Vanilla or hidden (see 1st screenshot).
+Note: the settings will be applied once when loading a city. This means that changes made when in-game will not be applied until you restart the map.
 
 
-[h1]Update 1.0.1 - PLEASE READ!!![/h1]
-[quote]Update 1.0.1 added a few changes that should make it easier to track any issues with loading the included props and textures (aka 'dependencies'):
+[b][i]May 25th, 2016 - v1.0.1[/i][/b]
+Update 1.0.1 adds a few changes that should make it easier to track any issues with loading the included props and textures (aka 'dependencies'):
 
 1. The mod will now always write less, but more useful data to output_log.txt:
 - the version number is now included to each debug statement.
