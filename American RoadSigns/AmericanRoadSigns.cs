@@ -26,6 +26,38 @@ namespace AmericanRoadSigns
             get { return "Americanizes Road and Highway Signs."; }
         }
 
+        //  Select Options:
+        private void OnHighwayGantryChanged(int c)
+        {
+            AmericanRoadSigns.config.rendermode_highwaygantry = c;
+            AmericanRoadSigns.SaveConfig();
+        }
+        private void OnHighwaySignChanged(int c)
+        {
+            AmericanRoadSigns.config.rendermode_highwaysign = c;
+            AmericanRoadSigns.SaveConfig();
+        }
+        private void OnNoParkingChanged(int c)
+        {
+            AmericanRoadSigns.config.rendermode_noparking = c;
+            AmericanRoadSigns.SaveConfig();
+        }
+        private void OnNoTurningChanged(int c)
+        {
+            AmericanRoadSigns.config.rendermode_noturnings = c;
+            AmericanRoadSigns.SaveConfig();
+        }
+        private void OnSpeedLimitChanged(int c)
+        {
+            AmericanRoadSigns.config.rendermode_speedlimits = c;
+            AmericanRoadSigns.SaveConfig();
+        }
+        private void OnStreetNameChanged(int c)
+        {
+            AmericanRoadSigns.config.rendermode_streetname = c;
+            AmericanRoadSigns.SaveConfig();
+        }
+        //  Toggle Options:
         private void EventEnableDebug(bool c)
         {
             AmericanRoadSigns.config.enable_debug = c;
@@ -53,6 +85,20 @@ namespace AmericanRoadSigns
             //  Mod options:
             UIHelperBase group = helper.AddGroup(Name);
             group.AddSpace(10);
+            //  Select Options:
+            group.AddDropdown("Highway overhead gantries", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_highwaygantry, OnHighwayGantryChanged);
+            group.AddSpace(5);
+            group.AddDropdown("'Highway' signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_highwaysign, OnHighwaySignChanged);
+            group.AddSpace(5);
+            group.AddDropdown("'No parking' signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_noparking, OnNoParkingChanged);
+            group.AddSpace(5);
+            group.AddDropdown("No left/right turn' signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_noturnings, OnNoTurningChanged);
+            group.AddSpace(5);
+            group.AddDropdown("Speed limit signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_speedlimits, OnSpeedLimitChanged);
+            group.AddSpace(5);
+            group.AddDropdown("Streetname signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_streetname, OnStreetNameChanged);
+            group.AddSpace(20);
+            //  Toggle Options:
             group.AddCheckbox("Load dependencies from local mod folder, if present.", AmericanRoadSigns.config.enable_localassets, new OnCheckChanged(EventEnableLocalAssets));
             group.AddSpace(20);
             group.AddCheckbox("Write data to debug log.", AmericanRoadSigns.config.enable_debug, new OnCheckChanged(EventEnableDebug));
@@ -64,6 +110,13 @@ namespace AmericanRoadSigns
 
     public class Configuration
     {
+        public int rendermode_highwaygantry = 0;
+        public int rendermode_highwaysign = 0;
+        public int rendermode_noparking = 0;
+        public int rendermode_noturnings = 0;
+        public int rendermode_speedlimits = 0;
+        public int rendermode_streetname = 0;
+
         public bool enable_localassets = false;
         public bool enable_debug = false;
 
@@ -349,59 +402,88 @@ namespace AmericanRoadSigns
                                         PropInfo testprop = new PropInfo();
 
                                         bool changeprop = false;
+                                        bool hideprop = false;
                                         string propName = pr.name.ToLower();
 
+                                        //  config.rendermode_x: 0 = American, 1 = Vanilla, 2 = Hide:
                                         if (propName.Contains("speed limit") && slpropsfound >= 5)
                                         {
-
-                                            if (propName.Contains("30"))
+                                            if (config.rendermode_speedlimits == 0)
                                             {
-                                                testprop = sl15;
-                                                changeprop = true;
+                                                if (propName.Contains("30"))
+                                                {
+                                                    testprop = sl15;
+                                                    changeprop = true;
+                                                }
+                                                else if (propName.Contains("40"))
+                                                {
+                                                    testprop = sl25;
+                                                    changeprop = true;
+                                                }
+                                                else if (propName.Contains("50"))
+                                                {
+                                                    testprop = sl30;
+                                                    changeprop = true;
+                                                }
+                                                else if (propName.Contains("60"))
+                                                {
+                                                    testprop = sl45;
+                                                    changeprop = true;
+                                                }
+                                                else if (propName.Contains("100"))
+                                                {
+                                                    testprop = sl65;
+                                                    changeprop = true;
+                                                }
                                             }
-                                            else if (propName.Contains("40"))
+                                            else if (config.rendermode_speedlimits == 2)
                                             {
-                                                testprop = sl25;
-                                                changeprop = true;
-                                            }
-                                            else if (propName.Contains("50"))
-                                            {
-                                                testprop = sl30;
-                                                changeprop = true;
-                                            }
-                                            else if (propName.Contains("60"))
-                                            {
-                                                testprop = sl45;
-                                                changeprop = true;
-                                            }
-                                            else if (propName.Contains("100"))
-                                            {
-                                                testprop = sl65;
-                                                changeprop = true;
+                                                hideprop = true;
                                             }
                                         }
                                         else if (propName.Contains("motorway sign") && motorwaypropfound)
                                         {
-                                            testprop = motorwaysign;
-                                            changeprop = true;
+                                            if (config.rendermode_highwaysign == 0)
+                                            {
+                                                testprop = motorwaysign;
+                                                changeprop = true;
+                                            }
+                                            else if (config.rendermode_highwaysign == 2)
+                                            {
+                                                hideprop = true;
+                                            }
                                         }
                                         else if (turnsignpropsfound >= 2 && propName.Contains("no right turn") || propName.Contains("no left turn"))
                                         {
-                                            if (propName.Contains("no left turn sign"))
+                                            if (config.rendermode_noturnings == 0)
                                             {
-                                                testprop = left_turn;
-                                                changeprop = true;
+                                                if (propName.Contains("no left turn sign"))
+                                                {
+                                                    testprop = left_turn;
+                                                    changeprop = true;
+                                                }
+                                                else if (propName.Contains("no right turn sign"))
+                                                {
+                                                    testprop = right_turn;
+                                                    changeprop = true;
+                                                }
                                             }
-                                            else if (propName.Contains("no right turn sign"))
+                                            else if (config.rendermode_noturnings == 2)
                                             {
-                                                testprop = right_turn;
-                                                changeprop = true;
+                                                hideprop = true;
                                             }
                                         }
                                         else if (propName.Contains("no parking sign") && parkingsignpropfound)
                                         {
-                                            testprop = parkingsign;
-                                            changeprop = true;
+                                            if (config.rendermode_noparking == 0)
+                                            {
+                                                testprop = parkingsign;
+                                                changeprop = true;
+                                            }
+                                            else if (config.rendermode_noparking == 2)
+                                            {
+                                                hideprop = true;
+                                            }
                                         }
 
                                         if (changeprop)
@@ -465,9 +547,16 @@ namespace AmericanRoadSigns
                                                 DebugUtils.Log($"[DEBUG] - {propName} replacement succesful.");
                                             }
                                         }
-                                        else
+                                        else if (hideprop)
                                         {
+                                            pr.m_maxRenderDistance = 0;
+                                            pr.m_maxScale = 0;
+                                            pr.m_minScale = 0;
                                             //  
+                                            if (config.enable_debug)
+                                            {
+                                                DebugUtils.Log($"[DEBUG] - {propName} hidden succesfully.");
+                                            }
                                         }
                                     }
 
@@ -488,36 +577,56 @@ namespace AmericanRoadSigns
             {
                 foreach (var prefab in pc.m_prefabs)
                 {
+                    //  config.rendermode_x: 0 = American, 1 = Vanilla, 2 = Hide:
                     if (prefab.name.Equals("Motorway Overroad Signs"))
                     {
-                        //var tex = new Texture2D (1, 1);
-                        //tex.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs.png")));
-                        prefab.m_material.SetTexture("_MainTex", LoadTextureDDS(Path.Combine(textureDir, "motorway-overroad-signs.dds")));
-                        //var tex2 = new Texture2D (1, 1);
-                        //tex2.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs-motorway-overroad-signs-aci.png")));
-                        prefab.m_material.SetTexture("_ACIMap", LoadTextureDDS(Path.Combine(textureDir, "motorway-overroad-signs-motorway-overroad-signs-aci.dds")));
-                        //var tex3 = new Texture2D (1, 1);
-                        //tex3.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs-motorway-overroad-signs-xys.png")));
-                        prefab.m_material.SetTexture("_XYSMap", LoadTextureDDS(Path.Combine(textureDir, "motorway-overroad-signs-motorway-overroad-signs-xys.dds")));
-                        prefab.m_lodRenderDistance = 100000;
-                        prefab.m_lodMesh = null;
-                        //prefab.m_maxRenderDistance = 12000;
-                        prefab.RefreshLevelOfDetail();
+                        if (config.rendermode_highwaygantry == 0)
+                        {
+                            //var tex = new Texture2D (1, 1);
+                            //tex.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs.png")));
+                            prefab.m_material.SetTexture("_MainTex", LoadTextureDDS(Path.Combine(textureDir, "motorway-overroad-signs.dds")));
+                            //var tex2 = new Texture2D (1, 1);
+                            //tex2.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs-motorway-overroad-signs-aci.png")));
+                            prefab.m_material.SetTexture("_ACIMap", LoadTextureDDS(Path.Combine(textureDir, "motorway-overroad-signs-motorway-overroad-signs-aci.dds")));
+                            //var tex3 = new Texture2D (1, 1);
+                            //tex3.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs-motorway-overroad-signs-xys.png")));
+                            prefab.m_material.SetTexture("_XYSMap", LoadTextureDDS(Path.Combine(textureDir, "motorway-overroad-signs-motorway-overroad-signs-xys.dds")));
+                            prefab.m_lodRenderDistance = 100000;
+                            prefab.m_lodMesh = null;
+                            //prefab.m_maxRenderDistance = 12000;
+                            prefab.RefreshLevelOfDetail();
+                            DebugUtils.Log("Motorway overhead sign props retextured succesfully.");
+                        }
+                        else if (config.rendermode_highwaygantry == 2)
+                        {
+                            prefab.m_maxRenderDistance = 0;
+                            prefab.m_maxScale = 0;
+                            prefab.m_minScale = 0;
+                            DebugUtils.Log("Motorway overhead sign props hidden succesfully.");
+                        }
                     }
                     else if (prefab.name.Equals("Street Name Sign"))
                     {
-                        //var tex = new Texture2D (1, 1);
-                        //tex.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "street-name-sign.png")));
-                        prefab.m_material.SetTexture("_MainTex", LoadTextureDDS(Path.Combine(textureDir, "street-name-sign.dds")));
-                        prefab.m_lodRenderDistance = 100000;
-                        prefab.m_lodMesh = null;
-
-                        prefab.RefreshLevelOfDetail();
+                        if (config.rendermode_streetname == 0)
+                        {
+                            //var tex = new Texture2D (1, 1);
+                            //tex.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "street-name-sign.png")));
+                            prefab.m_material.SetTexture("_MainTex", LoadTextureDDS(Path.Combine(textureDir, "street-name-sign.dds")));
+                            prefab.m_lodRenderDistance = 100000;
+                            prefab.m_lodMesh = null;
+                            prefab.RefreshLevelOfDetail();
+                            DebugUtils.Log("Street name sign props retextured succesfully.");
+                        }
+                        else if (config.rendermode_streetname == 2)
+                        {
+                            prefab.m_maxRenderDistance = 0;
+                            prefab.m_maxScale = 0;
+                            prefab.m_minScale = 0;
+                            DebugUtils.Log("Street name sign props hidden succesfully.");
+                        }
                     }
                 }
             }
-            DebugUtils.Log("Motorway overhead sign props retextured succesfully.");
-            DebugUtils.Log("Street name sign props retextured succesfully.");
 
             //var net_collections = FindObjectsOfType<NetCollection>();
             //try
