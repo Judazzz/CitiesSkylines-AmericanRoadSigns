@@ -62,6 +62,7 @@
   <ItemGroup>
     <Content Include="Assets\PreviewImage.Source.png" />
     <Content Include="Assets\WorkshopDescription.txt" />
+    <Content Include="motorway-overroad-signs-alt.dds" />
     <Content Include="motorway-overroad-signs-motorway-overroad-signs-aci.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -1,5 +1,5 @@
 [h1]About this mod[/h1]
-[quote]American RoadSigns is a stripped-down version of hyperdrive_engaged's original [url=http://steamcommunity.com/sharedfiles/filedetails/?id=418637762]American Roads mod[/url], which is no longer supported, and unfortunately causes some issues for some players.
+[quote]American RoadSigns is a stripped-down version of hyperdrive_engaged's original [url=http://steamcommunity.com/sharedfiles/filedetails/?id=418637762]American Roads[/url], which is no longer supported, and unfortunately causes some issues for some players.
 The good news is that recently an American Roads texture pack for Roads United was released, with (almost) full Network Extensions, the bad news was that Roads United focuses primarily on the road texturing part. That means that the lovely Americanized road signs that were part of American Roads were no longer present.
 
 And that's how this mod came to be: I stripped the code of American Roads of everything textures-related, and thus American Roads became American RoadSigns.[/quote]
@@ -18,25 +18,9 @@ Other than that I haven't noticed any incompatibilities: if you do, please repor
 
 [h1]Updates[/h1]
 [quote][b][i]May 26th, 2016 - v1.0.2[/i][/b]
-Update 1.0.2 adds a 'render mode' setting for each prop: American, Vanilla or hidden (see 1st screenshot).
+Update 1.0.2 added a 'render mode' setting for each prop: American, Vanilla or hidden (see 1st screenshot).
 Note: the settings will be applied once when loading a city. This means that changes made when in-game will not be applied until you restart the map.
 
-
 [b][i]May 25th, 2016 - v1.0.1[/i][/b]
-Update 1.0.1 adds a few changes that should make it easier to track any issues with loading the included props and textures (aka 'dependencies'):
-
-1. The mod will now always write less, but more useful data to output_log.txt:
-- the version number is now included to each debug statement.
-- the folder from where all dependencies are being loaded.
-- whether each dependency is found.
-- whether all props were replaced successfully.
-- whether the highway gantries and street name signs have been re-textured successfully.
-
-2. All dependencies have been moved to the base folder of the mod (where [i]American RoadSigns.dll[/i] is located).
-Important: the dependencies are no longer located in the folder named Assets (which is removed). If the folder 'Assets' is still present, please delete it manually (copy the contents to the base folder first if that hasn't happened automatically!);
-
-3. I added an option to load the dependencies from the local mod folder. To do so, follow these steps:
-- Go to your local C:SL Workshop folder (location: [i]C:\{Steam_Installation_Path}\steamapps\workshop\content\255710\690066392[/i]).
-- Copy [i]all files with the extensions .crp (9 in total) and .dds (4 in total)[/i] to a new folder named 'American RoadSigns', which should be created in your local mod folder (location: [i]C:\Users\{Windows_Username}\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods[/i]). 
-- Start the game, open the main options panel and find the options for American RoadSigns. Check the option 'Load dependencies from local mod folder, if present', and load/start a city.
-Don't worry, if not all dependencies are present locally, the mod will fall back to loading them from the Workshop folder.[/quote]
+Update 1.0.1 re-organized the file structure and added more description data to output_log.txt.
+More info [url=http://steamcommunity.com/sharedfiles/filedetails/changelog/690066392]here[/url].[/quote]

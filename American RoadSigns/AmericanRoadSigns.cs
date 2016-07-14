@@ -14,7 +14,7 @@ namespace AmericanRoadSigns
     public class Mod : IUserMod
     {
         public const UInt64 workshop_id = 690066392;
-        public const string version = "1.0.2";
+        public const string version = "1.0.3";
 
         public string Name
         {
@@ -58,13 +58,28 @@ namespace AmericanRoadSigns
             AmericanRoadSigns.SaveConfig();
         }
         //  Toggle Options:
-        private void EventEnableDebug(bool c)
+        private void OnAltHighwayGantryChanged(bool c)
+        {
+            AmericanRoadSigns.config.rendermode_highwaygantry_usealt = c;
+            AmericanRoadSigns.SaveConfig();
+        }
+        private void OnEnableManholesHighwayChanged(bool c)
+        {
+            AmericanRoadSigns.config.enable_manholes_highway = c;
+            AmericanRoadSigns.SaveConfig();
+        }
+        private void OnEnableManholesElevatedChanged(bool c)
+        {
+            AmericanRoadSigns.config.enable_manholes_elevated = c;
+            AmericanRoadSigns.SaveConfig();
+        }
+        private void OnEnableDebugChanged(bool c)
         {
             AmericanRoadSigns.config.enable_debug = c;
             AmericanRoadSigns.SaveConfig();
         }
 
-        private void EventEnableLocalAssets(bool c)
+        private void OnEnableLocalAssetsChanged(bool c)
         {
             AmericanRoadSigns.config.enable_localassets = c;
             AmericanRoadSigns.SaveConfig();
@@ -87,18 +102,28 @@ namespace AmericanRoadSigns
             group.AddSpace(10);
             //  Select Options:
             group.AddDropdown("Highway overhead gantries", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_highwaygantry, OnHighwayGantryChanged);
-            group.AddDropdown("'Highway' signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_highwaysign, OnHighwaySignChanged);
+            group.AddCheckbox("Use alternative American highway overhead gantry texture (WIP).", AmericanRoadSigns.config.rendermode_highwaygantry_usealt, new OnCheckChanged(OnAltHighwayGantryChanged));
+            group.AddSpace(10);
+            group.AddDropdown("Highway route signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_highwaysign, OnHighwaySignChanged);
             group.AddDropdown("'No parking' signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_noparking, OnNoParkingChanged);
             group.AddDropdown("No left/right turn' signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_noturnings, OnNoTurningChanged);
             group.AddDropdown("Speed limit signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_speedlimits, OnSpeedLimitChanged);
             group.AddDropdown("Streetname signs", new[] { "American", "Vanilla", "Hide" }, AmericanRoadSigns.config.rendermode_streetname, OnStreetNameChanged);
             group.AddSpace(20);
             //  Toggle Options:
-            group.AddCheckbox("Load dependencies from local mod folder, if present.", AmericanRoadSigns.config.enable_localassets, new OnCheckChanged(EventEnableLocalAssets));
+            //group.AddCheckbox("Disable random roadside props", AmericanRoadSigns.config.enable_streetprops, new OnCheckChanged(OnEnableStreetPropsChanged));
+            //group.AddSpace(10);
+            group.AddCheckbox("Disable manhole covers on highways", AmericanRoadSigns.config.enable_manholes_highway, new OnCheckChanged(OnEnableManholesHighwayChanged));
             group.AddSpace(10);
-            group.AddCheckbox("Write data to debug log.", AmericanRoadSigns.config.enable_debug, new OnCheckChanged(EventEnableDebug));
+            group.AddCheckbox("Disable manhole covers on elevated roads and bridges", AmericanRoadSigns.config.enable_manholes_elevated, new OnCheckChanged(OnEnableManholesElevatedChanged));
+            group.AddSpace(20);
+            //  Toggle Options:
+            group.AddCheckbox("Load dependencies from local mod folder, if present", AmericanRoadSigns.config.enable_localassets, new OnCheckChanged(OnEnableLocalAssetsChanged));
             group.AddSpace(10);
-            group.AddGroup("WARNING: enabling debug data may increase loading times considerably!\nEnable this setting is only recommended when you experience problems with this mod.");
+            group.AddCheckbox("Write additional data to debug log", AmericanRoadSigns.config.enable_debug, new OnCheckChanged(OnEnableDebugChanged));
+            group.AddSpace(10);
+            group.AddGroup("WARNING: enabling debug data may increase loading times considerably!\nEnable this setting is only recommended when you experience problems.");
+            group.AddSpace(20);
         }
     }
 
@@ -110,6 +135,12 @@ namespace AmericanRoadSigns
         public int rendermode_noturnings = 0;
         public int rendermode_speedlimits = 0;
         public int rendermode_streetname = 0;
+
+        public bool rendermode_highwaygantry_usealt = false;
+
+        public bool enable_manholes_highway = true;
+        public bool enable_manholes_elevated = true;
+        //public bool enable_streetprops = true;
 
         public bool enable_localassets = false;
         public bool enable_debug = false;
@@ -220,6 +251,7 @@ namespace AmericanRoadSigns
             AmericanRoadSigns.FindProps();
             AmericanRoadSigns.ReplaceProps();
             AmericanRoadSigns.ChangeProps(path);
+            //AmericanRoadSigns.ReplaceTextures(path);
             //  
             base.OnLevelLoaded(mode);
         }
@@ -306,6 +338,14 @@ namespace AmericanRoadSigns
             texture.Apply();
             texture.anisoLevel = 8;
             return texture;
+        }
+
+        public static Texture2D LoadTexture(string texturePath)
+        {
+            Texture2D texture2D = new Texture2D(1, 1);
+            texture2D.LoadImage(File.ReadAllBytes(texturePath));
+            texture2D.anisoLevel = 8;
+            return texture2D;
         }
 
         public static void FindProps()
@@ -399,7 +439,12 @@ namespace AmericanRoadSigns
                                         bool hideprop = false;
                                         string propName = pr.name.ToLower();
 
+                                        //if (propName.Contains("andom street pro") && !config.enable_streetprops)
+                                        //{
+                                        //    hideprop = true;
+                                        //}
                                         //  config.rendermode_x: 0 = American, 1 = Vanilla, 2 = Hide:
+                                        //else if (propName.Contains("speed limit") && slpropsfound >= 5)
                                         if (propName.Contains("speed limit") && slpropsfound >= 5)
                                         {
                                             if (config.rendermode_speedlimits == 0)
@@ -538,7 +583,7 @@ namespace AmericanRoadSigns
                                             //  
                                             if (config.enable_debug)
                                             {
-                                                DebugUtils.Log($"[DEBUG] - {propName} replacement succesful.");
+                                                DebugUtils.Log($"[DEBUG] - {propName} replacement successful.");
                                             }
                                         }
                                         else if (hideprop)
@@ -546,10 +591,9 @@ namespace AmericanRoadSigns
                                             pr.m_maxRenderDistance = 0;
                                             pr.m_maxScale = 0;
                                             pr.m_minScale = 0;
-                                            //  
                                             if (config.enable_debug)
                                             {
-                                                DebugUtils.Log($"[DEBUG] - {propName} hidden succesfully.");
+                                                DebugUtils.Log($"[DEBUG] - {propName} hidden successfully.");
                                             }
                                         }
                                     }
@@ -561,11 +605,12 @@ namespace AmericanRoadSigns
                 }
             }
             ReplacePropsTimer.Stop();
-            DebugUtils.Log($"Replaced all props succesfully (time elapsed: {ReplacePropsTimer.Elapsed} seconds).");
+            DebugUtils.Log($"Replaced all props successfully (time elapsed: {ReplacePropsTimer.Elapsed} seconds).");
         }
 
         public static void ChangeProps(string textureDir)
         {
+            //  Highway Gantry / Street Name Sign:
             var prop_collections = FindObjectsOfType<PropCollection>();
             foreach (var pc in prop_collections)
             {
@@ -576,9 +621,19 @@ namespace AmericanRoadSigns
                     {
                         if (config.rendermode_highwaygantry == 0)
                         {
+                            //  Custom:
                             //var tex = new Texture2D (1, 1);
                             //tex.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs.png")));
-                            prefab.m_material.SetTexture("_MainTex", LoadTextureDDS(Path.Combine(textureDir, "motorway-overroad-signs.dds")));
+                            //prefab.m_material.mainTexture = tex;
+                            //  Global:
+                            if (config.rendermode_highwaygantry_usealt)
+                            {
+                                prefab.m_material.SetTexture("_MainTex", LoadTextureDDS(Path.Combine(textureDir, "motorway-overroad-signs-alt.dds")));
+                            }
+                            else
+                            {
+                                prefab.m_material.SetTexture("_MainTex", LoadTextureDDS(Path.Combine(textureDir, "motorway-overroad-signs.dds")));
+                            }
                             //var tex2 = new Texture2D (1, 1);
                             //tex2.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs-motorway-overroad-signs-aci.png")));
                             prefab.m_material.SetTexture("_ACIMap", LoadTextureDDS(Path.Combine(textureDir, "motorway-overroad-signs-motorway-overroad-signs-aci.dds")));
@@ -589,14 +644,14 @@ namespace AmericanRoadSigns
                             prefab.m_lodMesh = null;
                             //prefab.m_maxRenderDistance = 12000;
                             prefab.RefreshLevelOfDetail();
-                            DebugUtils.Log("Motorway overhead sign props retextured succesfully.");
+                            DebugUtils.Log("Motorway overhead sign props retextured successfully.");
                         }
                         else if (config.rendermode_highwaygantry == 2)
                         {
                             prefab.m_maxRenderDistance = 0;
                             prefab.m_maxScale = 0;
                             prefab.m_minScale = 0;
-                            DebugUtils.Log("Motorway overhead sign props hidden succesfully.");
+                            DebugUtils.Log("Motorway overhead sign props hidden successfully.");
                         }
                     }
                     else if (prefab.name.Equals("Street Name Sign"))
@@ -609,75 +664,166 @@ namespace AmericanRoadSigns
                             prefab.m_lodRenderDistance = 100000;
                             prefab.m_lodMesh = null;
                             prefab.RefreshLevelOfDetail();
-                            DebugUtils.Log("Street name sign props retextured succesfully.");
+                            DebugUtils.Log("Street name sign props retextured successfully.");
                         }
                         else if (config.rendermode_streetname == 2)
                         {
                             prefab.m_maxRenderDistance = 0;
                             prefab.m_maxScale = 0;
                             prefab.m_minScale = 0;
-                            DebugUtils.Log("Street name sign props hidden succesfully.");
+                            DebugUtils.Log("Street name sign props hidden successfully.");
                         }
                     }
                 }
             }
 
-            //var net_collections = FindObjectsOfType<NetCollection>();
-            //try
-            //{
-            //    foreach (var nc in net_collections)
-            //    {
-            //        foreach (var prefab in nc.m_prefabs)
-            //        {
-            //            var prefab_name = prefab.m_class.name.ToLower();
-            //            if (!prefab_name.Contains("next"))
-            //            {   //  Exclude NExt roads:
-            //                if (prefab_name.Contains("highway") || prefab_name.Contains("elevated") || prefab_name.Contains("bridge"))
-            //                {
-            //                    if (prefab.m_lanes != null)
-            //                    {
-            //                        foreach (var lane in prefab.m_lanes)
-            //                        {
-            //                            var list = new FastList<NetLaneProps.Prop>();
-            //                            foreach (var prop in lane.m_laneProps.m_props)
-            //                            {
-            //                                if (!prop.m_prop.name.ToLower().Equals("manhole"))
-            //                                {
-            //                                    list.Add(prop);
-            //                                }
-            //                            }
-            //                            if (list.m_size > 0)
-            //                            {
-            //                                lane.m_laneProps.m_props = list.ToArray();
-            //                            }
-            //                        }
-            //                    }
-            //                }
-            //                //if (prefab.m_class.name.ToLower().Contains("elevated") || prefab.m_class.name.ToLower().Contains("bridge"))
-            //                //{
-            //                //    foreach (var lane in prefab.m_lanes)
-            //                //    {
-            //                //        var list = new FastList<NetLaneProps.Prop>();
-            //                //        foreach (var prop in lane.m_laneProps.m_props)
-            //                //        {
-            //                //            if (!prop.m_prop.name.ToLower().Equals("manhole"))
-            //                //            {
-            //                //                list.Add(prop);
-            //                //            }
-            //                //        }
-            //                //        lane.m_laneProps.m_props = list.ToArray();
-            //                //    }
-            //                //}
-            //            }
-            //        }
-            //    }
-            //    DebugUtils.Log("Manhole cover props removed from elevated roads, bridges and highways succesfully.");
-            //}
-            //catch (Exception e)
-            //{
-            //    DebugUtils.Log("Manhole cover props removed from elevated roads, bridges and highways unsuccesfully.");
-            //    DebugUtils.LogException(e);
-            //}
+            //  Props:
+            var net_collections = FindObjectsOfType<NetCollection>();
+            try
+            {
+                foreach (var nc in net_collections)
+                {
+                    foreach (var prefab in nc.m_prefabs)
+                    {
+                        var prefab_name = prefab.m_class.name.ToLower();
+                        //  Exclude NExt roads:
+                        if (!prefab_name.Contains("next"))
+                        {
+                            //  Highway manhole covers:
+                            if (!config.enable_manholes_highway && (prefab_name.Contains("highway") || prefab_name.Contains("elevated") || prefab_name.Contains("bridge")))
+                            {
+                                if (prefab.m_lanes != null)
+                                {
+                                    foreach (var lane in prefab.m_lanes)
+                                    {
+                                        if (lane.m_laneProps != null && lane.m_laneProps.m_props != null)
+                                        {
+                                            var list = new FastList<NetLaneProps.Prop>();
+                                            foreach (var prop in lane.m_laneProps.m_props)
+                                            {
+                                                if (!prop.m_prop.name.ToLower().Equals("manhole"))
+                                                {
+                                                    list.Add(prop);
+                                                }
+                                            }
+                                            if (list.m_size > 0)
+                                            {
+                                                lane.m_laneProps.m_props = list.ToArray();
+                                                DebugUtils.Log("Manhole cover props removed from highways successfully.");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            //  Elevated road/Bridge manhole covers:
+                            if (!config.enable_manholes_elevated && (prefab.m_class.name.ToLower().Contains("elevated") || prefab.m_class.name.ToLower().Contains("bridge")))
+                            {
+                                foreach (var lane in prefab.m_lanes)
+                                {
+                                    var list = new FastList<NetLaneProps.Prop>();
+                                    foreach (var prop in lane.m_laneProps.m_props)
+                                    {
+                                        DebugUtils.Log($"Lane prop name {prop.m_prop.name}.");
+                                        if (!prop.m_prop.name.ToLower().Equals("manhole"))
+                                        {
+                                            list.Add(prop);
+                                        }
+                                    }
+                                    if (list.m_size > 0)
+                                    {
+                                        lane.m_laneProps.m_props = list.ToArray();
+                                        DebugUtils.Log("Manhole cover props removed from elevated roads and bridges.");
+                                    }
+                                }
+                            }
+
+                            //  Random street props:
+                            //if (config.enable_streetprops)
+                            //{
+                            //    if (prefab.m_lanes != null)
+                            //    {
+
+                            //        foreach (var lane in prefab.m_lanes)
+                            //        {
+                            //            if (lane.m_laneProps != null)
+                            //            {
+                            //                //  Loop LaneProps:
+                            //                var list = new FastList<NetLaneProps.Prop>();
+                            //                for (int i = 0; i < lane.m_laneProps.m_props.Length; i++)
+                            //                {
+                            //                    if (lane.m_laneProps.m_props[i].m_prop != null)
+                            //                    {
+                            //                        var prop = lane.m_laneProps.m_props[i].m_prop;
+                            //                        string propName = prop.name.ToLower();
+
+                            //                        if (propName.ToLower() != "random street prop" && propName.ToLower() != "info sign")
+                            //                        {
+                            //                            list.Add(lane.m_laneProps.m_props[i]);
+                            //                        }
+
+                            //                        DebugUtils.Log($"Lane prop name {propName}.");
+                            //                    }
+                            //                }
+                            //                if (list.m_size > 0)
+                            //                {
+                            //                    lane.m_laneProps.m_props = list.ToArray();
+                            //                    DebugUtils.Log("Manhole cover props removed from elevated roads, bridges and highways successfully.");
+                            //                }
+                            //            }
+                            //        }
+
+
+                            //        //        //foreach (var lane in prefab.m_lanes)
+                            //        //        //{
+                            //        //        //    if (lane.m_laneProps != null && lane.m_laneProps.m_props != null)
+                            //        //        //    {
+                            //        //        //        var list = new FastList<NetLaneProps.Prop>();
+                            //        //        //        DebugUtils.Log($"Lane contains {lane.m_laneProps.m_props.Length} items.");
+                            //        //        //        foreach (var prop in lane.m_laneProps.m_props)
+                            //        //        //        {
+                            //        //        //            DebugUtils.Log($"Lane prop name {prop.m_prop.name}.");
+                            //        //        //            if (!prop.m_prop.name.ToLower().Equals("manhole"))
+                            //        //        //            {
+                            //        //        //                list.Add(prop);
+                            //        //        //            }
+                            //        //        //        }
+                            //        //        //        lane.m_laneProps.m_props = list.ToArray();
+                            //        //        //    }
+                            //        //        //}
+
+                            //        //        foreach (var lane in prefab.m_lanes)
+                            //        //        {
+                            //        //            if (lane.m_laneProps != null && lane.m_laneProps.m_props != null)
+                            //        //            {
+                            //        //                var list = new FastList<NetLaneProps.Prop>();
+                            //        //                DebugUtils.Log($"Lane contains {lane.m_laneProps.m_props.Length} items.");
+
+                            //        //                foreach (var prop in lane.m_laneProps.m_props)
+                            //        //                {
+                            //        //                    DebugUtils.Log($"Lane prop name {prop.m_prop.name}.");
+                            //        //                    //if (!prop.m_prop.name.ToLower().Equals("manhole"))
+                            //        //                    //{
+                            //        //                    //    list.Add(prop);
+                            //        //                    //}
+                            //        //                }
+                            //        //                if (list.m_size > 0)
+                            //        //                {
+                            //        //                    lane.m_laneProps.m_props = list.ToArray();
+                            //        //                }
+                            //        //            }
+                            //        //        }
+                            //    }
+                            //}
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                DebugUtils.Log("Manhole cover props removed from elevated roads, bridges and highways unsuccessfully.");
+                DebugUtils.LogException(e);
+            }
         }
     }
 }
