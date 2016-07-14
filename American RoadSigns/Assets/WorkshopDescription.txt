@@ -15,9 +15,14 @@ Other than that I haven't noticed any incompatibilities: if you do, please repor
 
 [b]Source:[/b] [url=https://github.com/Judazzz/CitiesSkylines-UltimateEyecandy]Github[/url]
 
-
 [h1]Updates[/h1]
-[quote][b][i]May 26th, 2016 - v1.0.2[/i][/b]
+[quote][b][i]July 14th, 2016 - v1.0.2[/i][/b]
+Update 1.0.3 added three new options, that enable you to:
+- remove manhole covers from highways;
+- remove manhole covers from bridges and elevated roads;
+- use an alternative highway overhead gantry texture.
+
+[b][i]May 26th, 2016 - v1.0.2[/i][/b]
 Update 1.0.2 added a 'render mode' setting for each prop: American, Vanilla or hidden (see 1st screenshot).
 Note: the settings will be applied once when loading a city. This means that changes made when in-game will not be applied until you restart the map.
 
