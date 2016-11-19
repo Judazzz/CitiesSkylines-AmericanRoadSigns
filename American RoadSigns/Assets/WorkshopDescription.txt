@@ -11,15 +11,25 @@ Other than that I haven't noticed any incompatibilities: if you do, please repor
 
 
 [h1]Thank you[/h1]
-[quote]It can't be stressed enough that full credit goes out to [url=http://steamcommunity.com/id/hyperdrive_engage/myworkshopfiles/?appid=255710][b]hyperdrive_engage[/b][/url], who unfortunately no longer seems to be creating content for Cities: Skylines. He is the one wrote the source code and created the props - I merely stripped all unnecessary code, optimized a few bits here and there and included some additional debug functionality.[/quote]
+[quote]It can't be stressed enough that full credit goes out to [url=http://steamcommunity.com/id/hyperdrive_engage/myworkshopfiles/?appid=255710][b]hyperdrive_engage[/b][/url], who unfortunately no longer seems to be creating content for Cities: Skylines. He is the one wrote the source code and created the props - without his pioneer work this mod would never have existed: I merely stripped all unnecessary code, optimized a few bits here and there, added a number of additional features, and included some additional debug functionality.[/quote]
 
 [b]Source:[/b] [url=https://github.com/Judazzz/CitiesSkylines-UltimateEyecandy]Github[/url]
 
 [h1]Updates[/h1]
-[quote][b][i]July 14th, 2016 - v1.0.2[/i][/b]
+[quote][b][i]November 19th, 2016 - v1.0.4[/i][/b]
+Update 1.0.4 added five new options, that enable you to:
+- remove electricity box props from road sides;
+- remove fire hydrant props from road sides;
+- remove info terminal props from road sides;
+- remove parking meter props from road sides;
+- remove random street props from road sides;
+It also fixed a bug related to removing manhole covers from highways/ramps, elevated roads and bridges (as in: it now actually works);
+- [b]NOTE[/b]: by default manhole covers and road side props are enabled!
+
+[b][i]July 14th, 2016 - v1.0.3[/i][/b]
 Update 1.0.3 added three new options, that enable you to:
-- remove manhole covers from highways;
-- remove manhole covers from bridges and elevated roads;
+- remove manholes from highways;
+- remove manholes from bridges and elevated roads;
 - use an alternative highway overhead gantry texture.
 
 [b][i]May 26th, 2016 - v1.0.2[/i][/b]
