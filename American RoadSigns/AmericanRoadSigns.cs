@@ -1,5 +1,6 @@
-﻿using ColossalFramework.Steamworks;
-using ColossalFramework.IO;
+﻿using ColossalFramework.IO;
+using ColossalFramework.PlatformServices;
+using ColossalFramework.Plugins;
 using ICities;
 using System;
 using System.IO;
@@ -7,15 +8,13 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 using System.Diagnostics;
-using ColossalFramework.Plugins;
-using System.Linq;
 
 namespace AmericanRoadSigns
 {
     public class Mod : IUserMod
     {
         public const UInt64 workshop_id = 690066392;
-        public const string version = "1.0.3";
+        public const string version = "1.1.0";
 
         public string Name
         {
@@ -218,6 +217,7 @@ namespace AmericanRoadSigns
 
     public class ModLoader : LoadingExtensionBase
     {
+
         public static string[] _dependencies = new string[] {
             "motorway-overroad-signs.dds",
             "motorway-overroad-signs-motorway-overroad-signs-aci.dds",
@@ -234,8 +234,9 @@ namespace AmericanRoadSigns
             "us no parking.crp"
         };
 
-        public static string getModPath()
+        public string getModPath()
         {
+            Workshop workshopInstance = new Workshop();
             string workshopPath = ".";
             //  Use local assets:
             if (AmericanRoadSigns.config.enable_localassets)
@@ -256,11 +257,12 @@ namespace AmericanRoadSigns
                 }
             }
             //  Use included assets:
-            foreach (PublishedFileId mod in Steam.workshop.GetSubscribedItems())
+            //PrefabCollection<PropInfo>.FindLoaded("694123443.AmericanTrafficLightMain_Data");
+            foreach (PublishedFileId mod in workshopInstance.GetSubscribedItems())
             {
                 if (mod.AsUInt64 == Mod.workshop_id)
                 {
-                    workshopPath = Steam.workshop.GetSubscribedItemPath(mod);
+                    workshopPath = workshopInstance.GetSubscribedItemPath(mod);
                     DebugUtils.Log($"Mod path: {workshopPath}.");
                     DependenciesPresent(false, workshopPath);
                     break;

@@ -16,7 +16,10 @@ Other than that I haven't noticed any incompatibilities: if you do, please repor
 [b]Source:[/b] [url=https://github.com/Judazzz/CitiesSkylines-UltimateEyecandy]Github[/url]
 
 [h1]Updates[/h1]
-[quote][b][i]November 19th, 2016 - v1.0.4[/i][/b]
+[quote][b][i]November 30th, 2016 - v1.1.0[/i][/b]
+Update 1.1.0 added support for C:SL 1.6.0 (Natural Disasters).
+
+[b][i]November 19th, 2016 - v1.0.4[/i][/b]
 Update 1.0.4 added five new options, that enable you to:
 - remove electricity box props from road sides;
 - remove fire hydrant props from road sides;
