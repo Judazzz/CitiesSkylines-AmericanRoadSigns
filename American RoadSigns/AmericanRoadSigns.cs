@@ -14,7 +14,7 @@ namespace AmericanRoadSigns
     public class Mod : IUserMod
     {
         public const UInt64 workshop_id = 690066392;
-        public const string version = "1.1.0";
+        public const string version = "1.1.1";
 
         public string Name
         {
@@ -274,6 +274,12 @@ namespace AmericanRoadSigns
 
         public override void OnLevelLoaded(LoadMode mode)
         {
+            // Disable mod for all but in-game:
+            if (mode != LoadMode.LoadGame && mode != LoadMode.NewGame)
+            {
+                return;
+            }
+            //  
             var activeConfigPath = (PluginManager.noWorkshop) ? AmericanRoadSigns.configPathLocal : AmericanRoadSigns.configPath;
             AmericanRoadSigns.config = Configuration.Deserialize(activeConfigPath);
             if (AmericanRoadSigns.config == null)
