@@ -1,20 +1,22 @@
 ﻿using ColossalFramework.IO;
 using ColossalFramework.PlatformServices;
 using ColossalFramework.Plugins;
+using ColossalFramework.UI;
 using ICities;
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using UnityEngine;
 using System.Diagnostics;
+using AmericanRoadSigns.GUI;
+using AmericanRoadSigns.Component;
 
 namespace AmericanRoadSigns
 {
-    public class Mod : IUserMod
+    public class ModInfo : IUserMod
     {
         public const UInt64 workshop_id = 690066392;
-        public const string version = "1.1.1";
+        public const string version = "1.1.0";
 
         public string Name
         {
@@ -155,69 +157,68 @@ namespace AmericanRoadSigns
         }
     }
 
-    public class Configuration
-    {
-        //  Road signs:
-        public int rendermode_highwaygantry = 0;
-        public int rendermode_highwaysign = 0;
-        public int rendermode_noparking = 0;
-        public int rendermode_noturnings = 0;
-        public int rendermode_speedlimits = 0;
-        public int rendermode_streetname = 0;
-        public bool rendermode_highwaygantry_usealt = false;
-        //  Street props:
-        public bool enable_manholes_highway = true;
-        public bool enable_manholes_elevated = true;
-        public bool enable_streetprops_electricitybox = true;
-        public bool enable_streetprops_firehydrant = true;
-        public bool enable_streetprops_infoterminal = true;
-        public bool enable_streetprops_parkingmeter = true;
-        public bool enable_streetprops_random = true;
-        //  Misc.
-        public bool enable_localassets = false;
-        public bool enable_debug = false;
+    //public class Configuration
+    //{
+    //    //  Road signs:
+    //    public int rendermode_highwaygantry = 0;
+    //    public int rendermode_highwaysign = 0;
+    //    public int rendermode_noparking = 0;
+    //    public int rendermode_noturnings = 0;
+    //    public int rendermode_speedlimits = 0;
+    //    public int rendermode_streetname = 0;
+    //    public bool rendermode_highwaygantry_usealt = false;
+    //    //  Street props:
+    //    public bool enable_manholes_highway = true;
+    //    public bool enable_manholes_elevated = true;
+    //    public bool enable_streetprops_electricitybox = true;
+    //    public bool enable_streetprops_firehydrant = true;
+    //    public bool enable_streetprops_infoterminal = true;
+    //    public bool enable_streetprops_parkingmeter = true;
+    //    public bool enable_streetprops_random = true;
+    //    //  Misc.
+    //    public bool enable_localassets = false;
+    //    public bool enable_debug = false;
 
-        public void OnPreSerialize()
-        {
-        }
+    //    public void OnPreSerialize()
+    //    {
+    //    }
 
-        public void OnPostDeserialize()
-        {
-        }
+    //    public void OnPostDeserialize()
+    //    {
+    //    }
 
-        public static void Serialize(string filename, Configuration config)
-        {
-            var serializer = new XmlSerializer(typeof(Configuration));
+    //    public static void Serialize(string filename, Configuration config)
+    //    {
+    //        var serializer = new XmlSerializer(typeof(Configuration));
 
-            using (var writer = new StreamWriter(filename))
-            {
-                config.OnPreSerialize();
-                serializer.Serialize(writer, config);
-            }
-        }
+    //        using (var writer = new StreamWriter(filename))
+    //        {
+    //            config.OnPreSerialize();
+    //            serializer.Serialize(writer, config);
+    //        }
+    //    }
 
-        public static Configuration Deserialize(string filename)
-        {
-            var serializer = new XmlSerializer(typeof(Configuration));
+    //    public static Configuration Deserialize(string filename)
+    //    {
+    //        var serializer = new XmlSerializer(typeof(Configuration));
 
-            try
-            {
-                using (var reader = new StreamReader(filename))
-                {
-                    var config = (Configuration)serializer.Deserialize(reader);
-                    config.OnPostDeserialize();
-                    return config;
-                }
-            }
-            catch { }
+    //        try
+    //        {
+    //            using (var reader = new StreamReader(filename))
+    //            {
+    //                var config = (Configuration)serializer.Deserialize(reader);
+    //                config.OnPostDeserialize();
+    //                return config;
+    //            }
+    //        }
+    //        catch { }
 
-            return null;
-        }
-    }
+    //        return null;
+    //    }
+    //}
 
     public class ModLoader : LoadingExtensionBase
     {
-
         public static string[] _dependencies = new string[] {
             "motorway-overroad-signs.dds",
             "motorway-overroad-signs-motorway-overroad-signs-aci.dds",
@@ -234,7 +235,7 @@ namespace AmericanRoadSigns
             "us no parking.crp"
         };
 
-        public string getModPath()
+        public static string getModPath()
         {
             Workshop workshopInstance = new Workshop();
             string workshopPath = ".";
@@ -257,10 +258,9 @@ namespace AmericanRoadSigns
                 }
             }
             //  Use included assets:
-            //PrefabCollection<PropInfo>.FindLoaded("694123443.AmericanTrafficLightMain_Data");
             foreach (PublishedFileId mod in workshopInstance.GetSubscribedItems())
             {
-                if (mod.AsUInt64 == Mod.workshop_id)
+                if (mod.AsUInt64 == ModInfo.workshop_id)
                 {
                     workshopPath = workshopInstance.GetSubscribedItemPath(mod);
                     DebugUtils.Log($"Mod path: {workshopPath}.");
@@ -274,12 +274,6 @@ namespace AmericanRoadSigns
 
         public override void OnLevelLoaded(LoadMode mode)
         {
-            // Disable mod for all but in-game:
-            if (mode != LoadMode.LoadGame && mode != LoadMode.NewGame)
-            {
-                return;
-            }
-            //  
             var activeConfigPath = (PluginManager.noWorkshop) ? AmericanRoadSigns.configPathLocal : AmericanRoadSigns.configPath;
             AmericanRoadSigns.config = Configuration.Deserialize(activeConfigPath);
             if (AmericanRoadSigns.config == null)
@@ -330,11 +324,13 @@ namespace AmericanRoadSigns
         }
     }
 
-    public class AmericanRoadSigns : MonoBehaviour
+    public class AmericanRoadSigns : LoadingExtensionBase
     {
         public static Configuration config;
         public static readonly string configPath = "CSL_AmericanRoadSigns.xml";
         public static readonly string configPathLocal = "CSL_AmericanRoadSigns_local.xml";
+        public static readonly string customsignsPath = "CSL_AmericanRoadSigns_Custom.xml";
+        public static readonly string customsignsPathLocal = "CSL_AmericanRoadSigns_Custom_local.xml";
 
         static PropInfo sl15 = new PropInfo();
         static PropInfo sl25 = new PropInfo();
@@ -351,6 +347,13 @@ namespace AmericanRoadSigns
         static int turnsignpropsfound = 0;
         static bool motorwaypropfound = false;
         static bool parkingsignpropfound = false;
+
+        //  Size Constants:
+        public static float WIDTH = 270;
+        public static float HEIGHT = 350;
+        public static float SPACING = 5;
+        public static float TITLE_HEIGHT = 36;
+        public static float TABS_HEIGHT = 28;
 
         public static void SaveConfig()
         {
@@ -450,7 +453,7 @@ namespace AmericanRoadSigns
 
         public static void ReplaceProps()
         {
-            var net_collections = FindObjectsOfType<NetCollection>();
+            var net_collections = UnityEngine.Object.FindObjectsOfType<NetCollection>();
             //  Loop NetCollections:
             Stopwatch ReplacePropsTimer = new Stopwatch();
             ReplacePropsTimer.Start();
@@ -650,7 +653,7 @@ namespace AmericanRoadSigns
 
         public static void ChangeProps(string textureDir)
         {
-            var prop_collections = FindObjectsOfType<PropCollection>();
+            var prop_collections = UnityEngine.Object.FindObjectsOfType<PropCollection>();
             foreach (var pc in prop_collections)
             {
                 foreach (var prefab in pc.m_prefabs)
@@ -740,7 +743,7 @@ namespace AmericanRoadSigns
                         prefab.m_minScale = 0;
                         DebugUtils.Log($"{prefab.name} props hidden successfully.");
                     }
-                    //  Street prop - electricity box:
+                    //  Street prop - parking meter:
                     else if (prefabName.Equals("parking meter") && !config.enable_streetprops_parkingmeter)
                     {
                         prefab.m_maxRenderDistance = 0;
@@ -748,7 +751,7 @@ namespace AmericanRoadSigns
                         prefab.m_minScale = 0;
                         DebugUtils.Log($"{prefab.name} props hidden successfully.");
                     }
-                    //  Street prop - electricity box:
+                    //  Street prop - random street prop:
                     else if (prefabName.Equals("random street prop") && !config.enable_streetprops_random)
                     {
                         prefab.m_maxRenderDistance = 0;
@@ -822,5 +825,113 @@ namespace AmericanRoadSigns
                 }
             }
         }
+
+
+
+        //  Apply sign to node/prop/whatever:
+        public static void ApplySign(string signName)
+        {
+
+        }
+        //  Create custom sign:
+        public static void CreateSign(UIPropItem _selectedProp, UITextureItem _selectedTexture)
+        {
+
+        }
+        //  Get all custom signs:
+        public static List<SignItem> GetAllSigns()
+        {
+            List<SignItem> list = new List<SignItem>();
+
+            return list;
+        }
+
+        private static GameObject _gameObject;
+        private static ModMainPanel _modMainPanel;
+        public static bool isEditor = false;
+        public static bool isGameLoaded = false;
+        public static OptionsGameplayPanel optionsGameplayPanel = new OptionsGameplayPanel();
+
+        #region LoadingExtensionBase overrides
+        public override void OnCreated(ILoading loading)
+        {
+            //try
+            //{
+            //    // Create backup:
+            //    SaveBackup();
+            //}
+            //catch (Exception e)
+            //{
+            //    DebugUtils.LogException(e);
+            //}
+        }
+
+        public override void OnLevelLoaded(LoadMode mode)
+        {
+            try
+            {
+                // Check if in-game or in Asset Editor:
+                if (mode != LoadMode.LoadGame && mode != LoadMode.NewGame && mode != LoadMode.LoadAsset && mode != LoadMode.NewAsset)
+                {
+                    return;
+                }
+                isEditor = (mode == LoadMode.LoadAsset || mode == LoadMode.NewAsset) ? true : false;
+                //  
+                isGameLoaded = true;
+                // Creating GUI:
+                UIView view = UIView.GetAView();
+                _gameObject = new GameObject("AmericanRoadSigns");
+                _gameObject.transform.SetParent(view.transform);
+                //  
+                try
+                {
+                    optionsGameplayPanel = UnityEngine.Object.Instantiate<GameObject>(UnityEngine.Object.FindObjectOfType<OptionsGameplayPanel>().gameObject).GetComponent<OptionsGameplayPanel>();
+                    //  
+                    _modMainPanel = _gameObject.AddComponent<ModMainPanel>();
+                    _modMainPanel.AddGuiToggle();
+                    if (config.enable_debug)
+                    {
+                        DebugUtils.Log("MainPanel created");
+                    }
+                }
+                catch (Exception e)
+                {
+                    DebugUtils.LogException(e);
+                    //  
+                    if (_gameObject != null)
+                        GameObject.Destroy(_gameObject);
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                if (_gameObject != null)
+                {
+                    GameObject.Destroy(_gameObject);
+                }
+                DebugUtils.LogException(e);
+            }
+        }
+
+        public override void OnLevelUnloading()
+        {
+            try
+            {
+                GUI.UIUtils.DestroyDeeply(_modMainPanel);
+                if (_gameObject != null)
+                    GameObject.Destroy(_gameObject);
+
+                isGameLoaded = false;
+            }
+            catch (Exception e)
+            {
+                DebugUtils.LogException(e);
+            }
+        }
+
+        public override void OnReleased()
+        {
+        }
+        #endregion
     }
 }

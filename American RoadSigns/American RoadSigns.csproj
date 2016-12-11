@@ -7,10 +7,11 @@
     <ProjectGuid>{62ECC5CD-D383-41D3-9314-5137375AE2F3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>American_RoadSigns</RootNamespace>
-    <AssemblyName>American RoadSigns</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>AmericanRoadSigns</RootNamespace>
+    <AssemblyName>AmericanRoadSigns</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,9 +44,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\..\..\..\..\..\My Games\steamapps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.dll</HintPath>
@@ -56,11 +55,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmericanRoadSigns.cs" />
+    <Compile Include="Component\SignItem.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="DebugUtils.cs" />
+    <Compile Include="GUI\SignApplicatorPanel.cs" />
+    <Compile Include="GUI\SignCreatorPanel.cs" />
+    <Compile Include="GUI\ModMainPanel.cs" />
+    <Compile Include="GUI\UIFastList.cs" />
+    <Compile Include="GUI\UIMainTitleBar.cs" />
+    <Compile Include="GUI\UIPropItem.cs" />
+    <Compile Include="GUI\UISignItem.cs" />
+    <Compile Include="GUI\UITextureItem.cs" />
+    <Compile Include="GUI\UIutils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\PreviewImage.Source.png" />
     <Content Include="Assets\WorkshopDescription.txt" />
     <Content Include="motorway-overroad-signs-alt.dds" />
     <Content Include="motorway-overroad-signs-motorway-overroad-signs-aci.dds">
@@ -105,7 +114,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\ToolbarAtlas.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)"
