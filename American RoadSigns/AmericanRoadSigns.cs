@@ -116,7 +116,7 @@ namespace AmericanRoadSigns
         public void OnSettingsUI(UIHelperBase helper)
         {
             var activeConfigPath = (PluginManager.noWorkshop) ? AmericanRoadSigns.configPathLocal : AmericanRoadSigns.configPath;
-            AmericanRoadSigns.config = Configuration.Deserialize(activeConfigPath);
+            AmericanRoadSigns.config = Configuration.Load(activeConfigPath);
             //  
             bool flag = AmericanRoadSigns.config == null;
             if (flag)
@@ -235,6 +235,29 @@ namespace AmericanRoadSigns
             "us no parking.crp"
         };
 
+        public override void OnLevelLoaded(LoadMode mode)
+        {
+            var activeConfigPath = (PluginManager.noWorkshop) ? AmericanRoadSigns.configPathLocal : AmericanRoadSigns.configPath;
+            AmericanRoadSigns.config = Configuration.Load(activeConfigPath);
+            if (AmericanRoadSigns.config == null)
+            {
+                AmericanRoadSigns.config = new Configuration();
+            }
+            AmericanRoadSigns.SaveConfig();
+            //  
+            string path = getModPath();
+            AmericanRoadSigns.FindProps();
+            AmericanRoadSigns.ReplaceProps();
+            AmericanRoadSigns.ChangeProps(path);
+            //  
+            base.OnLevelLoaded(mode);
+        }
+
+        public override void OnLevelUnloading()
+        {
+            base.OnLevelUnloading();
+        }
+
         public static string getModPath()
         {
             Workshop workshopInstance = new Workshop();
@@ -270,29 +293,6 @@ namespace AmericanRoadSigns
             }
             DebugUtils.Log($"Load included props and textures from Workshop folder ({workshopPath}).");
             return workshopPath;
-        }
-
-        public override void OnLevelLoaded(LoadMode mode)
-        {
-            var activeConfigPath = (PluginManager.noWorkshop) ? AmericanRoadSigns.configPathLocal : AmericanRoadSigns.configPath;
-            AmericanRoadSigns.config = Configuration.Deserialize(activeConfigPath);
-            if (AmericanRoadSigns.config == null)
-            {
-                AmericanRoadSigns.config = new Configuration();
-            }
-            AmericanRoadSigns.SaveConfig();
-            //  
-            string path = getModPath();
-            AmericanRoadSigns.FindProps();
-            AmericanRoadSigns.ReplaceProps();
-            AmericanRoadSigns.ChangeProps(path);
-            //  
-            base.OnLevelLoaded(mode);
-        }
-
-        public override void OnLevelUnloading()
-        {
-            base.OnLevelUnloading();
         }
 
         public static bool DependenciesPresent(bool isLocal, string path)
@@ -358,7 +358,7 @@ namespace AmericanRoadSigns
         public static void SaveConfig()
         {
             var activeConfigPath = (PluginManager.noWorkshop) ? configPathLocal : configPath;
-            Configuration.Serialize(activeConfigPath, config);
+            Configuration.Save(activeConfigPath, config);
         }
 
         public static Texture2D LoadTextureDDS(string texturePath)

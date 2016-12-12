@@ -1,5 +1,4 @@
-﻿using AmericanRoadSigns.Component;
-using ColossalFramework.UI;
+﻿using ColossalFramework.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -58,7 +57,7 @@ namespace AmericanRoadSigns.GUI
             // FastList
             _signFastList = UIFastList.Create<UISignItem>(signContainer);
             _signFastList.backgroundSprite = "UnlockingPanel";
-            _signFastList.width = parent.width - (3 * AmericanRoadSigns.SPACING) - 12;
+            _signFastList.width = parent.width - (3 * AmericanRoadsignsTool.SPACING) - 12;
             _signFastList.height = 90;
             _signFastList.canSelect = true;
             _signFastList.eventSelectedIndexChanged += OnSelectedSignItemChanged;
@@ -76,11 +75,11 @@ namespace AmericanRoadSigns.GUI
             _applySignButton.eventClicked += (c, e) =>
             {
                 //  
-                if (AmericanRoadSigns.config.enable_debug)
+                if (AmericanRoadsignsTool.config.enable_debug)
                 {
                     DebugUtils.Log($"SignApplicatorPanel: 'Apply sign' clicked: sign '{_selectedSign.name}', target node/prop/whatever.");
                 }
-                AmericanRoadSigns.ApplySign(_selectedSign.name);
+                //AmericanRoadsignsTool.ApplySign(_selectedSign.name);
                 //  Button appearance:
                 updateButtons(true);
             };
@@ -101,29 +100,29 @@ namespace AmericanRoadSigns.GUI
 
         public void PopulateSignFastList()
         {
-            _signFastList.rowsData.Clear();
-            _signFastList.selectedIndex = -1;
-            //  
-            List<SignItem> allSigns = AmericanRoadSigns.GetAllSigns();
-            if (allSigns.Count > 0)
-            {
-                for (int i = 0; i < allSigns.Count; i++)
-                {
-                    if (allSigns[i] != null)
-                    {
-                        _signFastList.rowsData.Add(allSigns[i]);
-                    }
-                }
-                //  
-                _signFastList.rowHeight = 26f;
-                _signFastList.DisplayAt(0);
-            }
+            //_signFastList.rowsData.Clear();
+            //_signFastList.selectedIndex = -1;
+            ////  
+            //List<SignItem> allSigns = AmericanRoadsignsTool.GetAllSigns();
+            //if (allSigns.Count > 0)
+            //{
+            //    for (int i = 0; i < allSigns.Count; i++)
+            //    {
+            //        if (allSigns[i] != null)
+            //        {
+            //            _signFastList.rowsData.Add(allSigns[i]);
+            //        }
+            //    }
+            //    //  
+            //    _signFastList.rowHeight = 26f;
+            //    _signFastList.DisplayAt(0);
+            //}
         }
 
         protected void OnSelectedSignItemChanged(UIComponent component, int i)
         {
             _selectedSign = _signFastList.rowsData[i] as UISignItem;
-            if (AmericanRoadSigns.config.enable_debug)
+            if (AmericanRoadsignsTool.config.enable_debug)
             {
                 DebugUtils.Log($"PresetsPanel: FastListItem selected: preset '{_selectedSign.name}'.");
             }

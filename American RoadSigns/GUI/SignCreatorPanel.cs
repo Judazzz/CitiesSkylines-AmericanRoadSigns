@@ -1,7 +1,5 @@
 ﻿using ColossalFramework.UI;
 using UnityEngine;
-
-using AmericanRoadSigns;
 using System.Collections.Generic;
 
 namespace AmericanRoadSigns.GUI
@@ -70,7 +68,7 @@ namespace AmericanRoadSigns.GUI
             // FastList
             _propFastList = UIFastList.Create<UIPropItem>(propContainer);
             _propFastList.backgroundSprite = "UnlockingPanel";
-            _propFastList.width = parent.width - (3 * AmericanRoadSigns.SPACING) - 12;
+            _propFastList.width = parent.width - (3 * AmericanRoadsignsTool.SPACING) - 12;
             _propFastList.height = 90;
             _propFastList.canSelect = true;
             _propFastList.eventSelectedIndexChanged += OnSelectedPropItemChanged;
@@ -86,7 +84,7 @@ namespace AmericanRoadSigns.GUI
 
             _textureFastList = UIFastList.Create<UITextureItem>(textureContainer);
             _textureFastList.backgroundSprite = "UnlockingPanel";
-            _textureFastList.width = parent.width - (3 * AmericanRoadSigns.SPACING) - 12;
+            _textureFastList.width = parent.width - (3 * AmericanRoadsignsTool.SPACING) - 12;
             _textureFastList.height = 90;
             _textureFastList.canSelect = true;
             _textureFastList.eventSelectedIndexChanged += OnSelectedTextureItemChanged;
@@ -104,11 +102,11 @@ namespace AmericanRoadSigns.GUI
             _createSignButton.eventClicked += (c, e) =>
             {
                 //  
-                if (AmericanRoadSigns.config.enable_debug)
+                if (AmericanRoadsignsTool.config.enable_debug)
                 {
                     DebugUtils.Log($"SignCreatorPanel: 'Create Sign' clicked'.");
                 }
-                AmericanRoadSigns.CreateSign(_selectedProp, _selectedTexture);
+                //AmericanRoadsignsTool.CreateSign(_selectedProp, _selectedTexture);
                 //  Button appearance:
                 updateButtons(true);
             };
@@ -132,7 +130,7 @@ namespace AmericanRoadSigns.GUI
             _propFastList.rowsData.Clear();
             _propFastList.selectedIndex = -1;
             ////    List .crp files in resources folder:
-            List<PropInfo> allProps = new List<PropInfo>(); //AmericanRoadSigns.GetSignProps();
+            List<PropInfo> allProps = new List<PropInfo>(); //AmericanRoadsignsTool.GetSignProps();
             if (allProps.Count > 0)
             {
                 for (int i = 0; i < allProps.Count; i++)
@@ -152,7 +150,7 @@ namespace AmericanRoadSigns.GUI
             //_textureFastList.rowsData.Clear();
             //_textureFastList.selectedIndex = -1;
             ////    List texture files (.png) in selected prop folder (child of resources folder):
-            //List<Configuration.TextureItem> allTextures = AmericanRoadSigns.GetTexturesForProp(_selectedProp);
+            //List<Configuration.TextureItem> allTextures = AmericanRoadsignsTool.GetTexturesForProp(_selectedProp);
             //if (allTextures.Count > 0)
             //{
             //    for (int i = 0; i < allTextures.Count; i++)
@@ -174,7 +172,7 @@ namespace AmericanRoadSigns.GUI
             _selectedProp = _propFastList.rowsData[i] as UIPropItem;
             //  Load textures for selected prop in FastList:
             PopulateTextureFastList(_selectedProp.name);
-            if (AmericanRoadSigns.config.enable_debug)
+            if (AmericanRoadsignsTool.config.enable_debug)
             {
                 DebugUtils.Log($"PresetsPanel: FastListItem selected: preset '{_selectedProp.name}'.");
             }
@@ -185,7 +183,7 @@ namespace AmericanRoadSigns.GUI
         protected void OnSelectedTextureItemChanged(UIComponent component, int i)
         {
             _selectedTexture = _textureFastList.rowsData[i] as UITextureItem;
-            if (AmericanRoadSigns.config.enable_debug)
+            if (AmericanRoadsignsTool.config.enable_debug)
             {
                 DebugUtils.Log($"PresetsPanel: FastListItem selected: preset '{_selectedTexture.name}'.");
             }

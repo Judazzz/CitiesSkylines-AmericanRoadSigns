@@ -6,7 +6,7 @@ namespace AmericanRoadSigns
 {
     class DebugUtils
     {
-        public const string modPrefix = "[American RoadSigns " + ModInfo.version + "] ";
+        public const string modPrefix = "[American RoadSigns " + Mod.version + "] ";
 
         public static void Message(string message)
         {

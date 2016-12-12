@@ -23,14 +23,14 @@ namespace AmericanRoadSigns.GUI
         public UITextureAtlas toggleButtonAtlas = null;
         static readonly string AR = "AmericanRoadSigns";
 
-        private static GameObject _gameObject;
+        //private static GameObject _gameObject;
 
-        private static ModMainPanel _instance;
-        public static ModMainPanel instance
-
-        {
-            get { return _instance; }
-        }
+        //private static ModMainPanel _instance;
+        //public static ModMainPanel instance
+        //{
+        //    get { return _instance; }
+        //}
+        public static ModMainPanel instance;
 
         public static void Initialize()
         {
@@ -74,8 +74,8 @@ namespace AmericanRoadSigns.GUI
 
             //  Tabs:
             panelTabs = AddUIComponent<UITabstrip>();
-            panelTabs.relativePosition = new Vector2(10, AmericanRoadSigns.TITLE_HEIGHT + AmericanRoadSigns.SPACING);
-            panelTabs.size = new Vector2(AmericanRoadSigns.WIDTH - (3 * AmericanRoadSigns.SPACING), AmericanRoadSigns.TABS_HEIGHT);
+            panelTabs.relativePosition = new Vector2(10, AmericanRoadsignsTool.TITLE_HEIGHT + AmericanRoadsignsTool.SPACING);
+            panelTabs.size = new Vector2(AmericanRoadsignsTool.WIDTH - (3 * AmericanRoadsignsTool.SPACING), AmericanRoadsignsTool.TABS_HEIGHT);
 
             //  Tab Buttons:
             signCreatorButton = UIUtils.CreateTab(panelTabs, "Create signs", true);
@@ -87,8 +87,8 @@ namespace AmericanRoadSigns.GUI
 
             //  Main Panel:
             UIPanel body = AddUIComponent<UIPanel>();
-            body.width = AmericanRoadSigns.WIDTH;
-            body.height = AmericanRoadSigns.HEIGHT;
+            body.width = AmericanRoadsignsTool.WIDTH;
+            body.height = AmericanRoadsignsTool.HEIGHT;
             //  ScrollRect
             body.relativePosition = new Vector3(5, 36 + 28 + 5);
 
@@ -96,15 +96,15 @@ namespace AmericanRoadSigns.GUI
             //  Sign Creator Panel:
             signCreatorPanel = body.AddUIComponent<SignCreatorPanel>();
             signCreatorPanel.name = "SignCreatorPanel";
-            signCreatorPanel.width = AmericanRoadSigns.WIDTH - (3 * AmericanRoadSigns.SPACING);
-            signCreatorPanel.height = AmericanRoadSigns.HEIGHT;
+            signCreatorPanel.width = AmericanRoadsignsTool.WIDTH - (3 * AmericanRoadsignsTool.SPACING);
+            signCreatorPanel.height = AmericanRoadsignsTool.HEIGHT;
             signCreatorPanel.relativePosition = new Vector3(5, 0);
             signCreatorPanel.isVisible = true;
             //  Sign Applicator Panel:
             signApplicatorPanel = body.AddUIComponent<SignApplicatorPanel>();
             signApplicatorPanel.name = "signApplicatorPanel";
-            signApplicatorPanel.width = AmericanRoadSigns.WIDTH - 3 * AmericanRoadSigns.SPACING;
-            signApplicatorPanel.height = AmericanRoadSigns.HEIGHT;
+            signApplicatorPanel.width = AmericanRoadsignsTool.WIDTH - 3 * AmericanRoadsignsTool.SPACING;
+            signApplicatorPanel.height = AmericanRoadsignsTool.HEIGHT;
             signApplicatorPanel.relativePosition = new Vector3(5, 0);
 
             signApplicatorPanel.isVisible = false;
@@ -115,7 +115,7 @@ namespace AmericanRoadSigns.GUI
 
         private void TabClicked(UIComponent trigger, UIMouseEventParameter e)
         {
-            if (AmericanRoadSigns.config.enable_debug)
+            if (AmericanRoadsignsTool.config.enable_debug)
             {
                 DebugUtils.Log($"MainPanel: Tab '{trigger.name}' clicked");
             }
