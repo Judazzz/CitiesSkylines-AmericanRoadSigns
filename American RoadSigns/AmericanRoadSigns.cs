@@ -14,11 +14,11 @@ namespace AmericanRoadSigns
     public class Mod : IUserMod
     {
         public const UInt64 workshop_id = 690066392;
-        public const string version = "1.1.1";
+        public const string version = "1.1.2";
 
         public string Name
         {
-            get { return "American RoadSigns"; }
+            get { return "American RoadSigns " + version; }
         }
 
         public string Description
@@ -685,14 +685,20 @@ namespace AmericanRoadSigns
                             prefab.m_lodMesh = null;
                             //prefab.m_maxRenderDistance = 12000;
                             prefab.RefreshLevelOfDetail();
-                            DebugUtils.Log("Motorway overhead sign props retextured successfully.");
+                            if (config.enable_debug)
+                            {
+                                DebugUtils.Log("Motorway overhead sign props retextured successfully.");
+                            }
                         }
                         else if (config.rendermode_highwaygantry == 2)
                         {
                             prefab.m_maxRenderDistance = 0;
                             prefab.m_maxScale = 0;
                             prefab.m_minScale = 0;
-                            DebugUtils.Log("Motorway overhead sign props hidden successfully.");
+                            if (config.enable_debug)
+                            {
+                                DebugUtils.Log("Motorway overhead sign props hidden successfully.");
+                            }
                         }
                     }
                     //  Street name sign:
@@ -706,14 +712,21 @@ namespace AmericanRoadSigns
                             prefab.m_lodRenderDistance = 100000;
                             prefab.m_lodMesh = null;
                             prefab.RefreshLevelOfDetail();
-                            DebugUtils.Log("Street name sign props retextured successfully.");
+
+                            if (config.enable_debug)
+                            {
+                                DebugUtils.Log("Street name sign props retextured successfully.");
+                            }
                         }
                         else if (config.rendermode_streetname == 2)
                         {
                             prefab.m_maxRenderDistance = 0;
                             prefab.m_maxScale = 0;
                             prefab.m_minScale = 0;
-                            DebugUtils.Log("Street name sign props hidden successfully.");
+                            if (config.enable_debug)
+                            {
+                                DebugUtils.Log("Street name sign props hidden successfully.");
+                            }
                         }
                     }
                     //  Street prop - electricity box:
@@ -722,7 +735,10 @@ namespace AmericanRoadSigns
                         prefab.m_maxRenderDistance = 0;
                         prefab.m_maxScale = 0;
                         prefab.m_minScale = 0;
-                        DebugUtils.Log($"{prefab.name} props hidden successfully.");
+                        if (config.enable_debug)
+                        {
+                            DebugUtils.Log($"{prefab.name} props hidden successfully.");
+                        }
                     }
                     //  Street prop - fire hydrant:
                     else if (prefabName.Equals("fire hydrant") && !config.enable_streetprops_firehydrant)
@@ -730,7 +746,10 @@ namespace AmericanRoadSigns
                         prefab.m_maxRenderDistance = 0;
                         prefab.m_maxScale = 0;
                         prefab.m_minScale = 0;
-                        DebugUtils.Log($"{prefab.name} props hidden successfully.");
+                        if (config.enable_debug)
+                        {
+                            DebugUtils.Log($"{prefab.name} props hidden successfully.");
+                        }
                     }
                     //  Street prop - info terminal:
                     else if (prefabName.Equals("info terminal") && !config.enable_streetprops_infoterminal)
@@ -738,7 +757,10 @@ namespace AmericanRoadSigns
                         prefab.m_maxRenderDistance = 0;
                         prefab.m_maxScale = 0;
                         prefab.m_minScale = 0;
-                        DebugUtils.Log($"{prefab.name} props hidden successfully.");
+                        if (config.enable_debug)
+                        {
+                            DebugUtils.Log($"{prefab.name} props hidden successfully.");
+                        }
                     }
                     //  Street prop - electricity box:
                     else if (prefabName.Equals("parking meter") && !config.enable_streetprops_parkingmeter)
@@ -746,7 +768,10 @@ namespace AmericanRoadSigns
                         prefab.m_maxRenderDistance = 0;
                         prefab.m_maxScale = 0;
                         prefab.m_minScale = 0;
-                        DebugUtils.Log($"{prefab.name} props hidden successfully.");
+                        if (config.enable_debug)
+                        {
+                            DebugUtils.Log($"{prefab.name} props hidden successfully.");
+                        }
                     }
                     //  Street prop - electricity box:
                     else if (prefabName.Equals("random street prop") && !config.enable_streetprops_random)
@@ -754,7 +779,10 @@ namespace AmericanRoadSigns
                         prefab.m_maxRenderDistance = 0;
                         prefab.m_maxScale = 0;
                         prefab.m_minScale = 0;
-                        DebugUtils.Log($"{prefab.name}s hidden successfully.");
+                        if (config.enable_debug)
+                        {
+                            DebugUtils.Log($"{prefab.name}s hidden successfully.");
+                        }
                     }
                 }
             }
@@ -790,7 +818,10 @@ namespace AmericanRoadSigns
                             if (list.m_size > 0)
                             {
                                 lane.m_laneProps.m_props = list.ToArray();
-                                DebugUtils.Log($"Manhole cover props successfully removed from highway type {road.name}.");
+                                if (config.enable_debug)
+                                {
+                                    DebugUtils.Log($"Manhole cover props successfully removed from highway type {road.name}.");
+                                }
                             }
                         }
                     }
@@ -815,7 +846,10 @@ namespace AmericanRoadSigns
                             if (list.m_size > 0)
                             {
                                 lane.m_laneProps.m_props = list.ToArray();
-                                DebugUtils.Log($"Manhole cover props successfully removed from road type {road.name}.");
+                                if (config.enable_debug)
+                                {
+                                    DebugUtils.Log($"Manhole cover props successfully removed from road type {road.name}.");
+                                }
                             }
                         }
                     }
