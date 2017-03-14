@@ -390,6 +390,12 @@ namespace AmericanRoadSigns
 
         public static void FindProps()
         {
+            //  No f'n clue what causes this weird behavior, but code below causes error on European maps, so return if loaded map is European:
+            if (LoadingManager.instance.m_loadedEnvironment.ToLower() == "europe")
+            {
+                return;
+            }
+            //  
             for (int i = 0; i < PrefabCollection<PropInfo>.LoadedCount(); i++)
             {
                 string propName = PrefabCollection<PropInfo>.GetLoaded((uint)i).name.ToLower();
