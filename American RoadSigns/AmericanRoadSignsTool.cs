@@ -270,6 +270,11 @@ namespace AmericanRoadSigns
             string propNames = string.Empty;
             for (int i = 0; i < PrefabCollection<PropInfo>.LoadedCount(); i++)
             {
+                //  No f'n clue what causes this weird behavior, but code below causes error on European maps, so return if loaded map is European:
+                //if (LoadingManager.instance.m_loadedEnvironment.ToLower() == "europe")
+                //{
+                //    return;
+                //}
                 PropInfo prop = PrefabCollection<PropInfo>.GetLoaded((uint)i);
                 //  Custom props:
                 if (prop.m_isCustomContent)
