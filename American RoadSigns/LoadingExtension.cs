@@ -27,18 +27,17 @@ namespace AmericanRoadSigns
                 DebugUtils.Log($"Mod not loaded: only available in-game, not in editors.");
                 return;
             }
-            // 
+            //  Initialize the mod:
             AmericanRoadsignsTool.Initialize();
+            //  Load mod config:
             AmericanRoadsignsTool.LoadConfig();
             //  Set assets path:
             AmericanRoadsignsTool.SetModPath();
-            //  Check assets presence:
-            //  AmericanRoadsignsTool.CheckProps();
             //  Init. assets:
             AmericanRoadsignsTool.InitProps();
-            //  Replace vanilla assets:
+            //  Replace/hide props:
             AmericanRoadsignsTool.ReplacePropsOnLoad();
-            //  Change vanilla assets:
+            //  Retexture/hide props:
             AmericanRoadsignsTool.ChangePropsOnLoad();
             //  
             base.OnLevelLoaded(mode);

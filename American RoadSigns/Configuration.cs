@@ -23,8 +23,8 @@ namespace AmericanRoadSigns
         public int rendermode_speedlimits = 0;
         public int rendermode_streetname = 0;
         //  Street props:
-        public bool enable_manholes_highway = true;
-        public bool enable_manholes_elevated = true;
+        public bool enable_manholes_highway = false;
+        public bool enable_manholes_elevated = false;
         public bool enable_streetprops_electricitybox = true;
         public bool enable_streetprops_firehydrant = true;
         public bool enable_streetprops_infoterminal = true;

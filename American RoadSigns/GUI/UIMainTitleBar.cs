@@ -53,15 +53,19 @@ namespace AmericanRoadSigns.GUI
             relativePosition = Vector3.zero;
 
             m_drag = AddUIComponent<UIDragHandle>();
-            m_drag.width = width - 50;
+            m_drag.width = width;
+            m_drag.width = AmericanRoadsignsTool.WIDTH + 5;
             m_drag.height = height;
             m_drag.relativePosition = Vector3.zero;
             m_drag.target = parent;
 
             m_title = AddUIComponent<UILabel>();
-            m_title.relativePosition = new Vector3(70, 13);
+            m_title.width = width;
+            m_title.relativePosition = new Vector3(0, 13);
             m_title.text = title;
+            m_title.textAlignment = UIHorizontalAlignment.Center;
             m_title.textScale = 0.9f;
+            m_title.autoSize = false;
             m_title.isInteractive = false;
 
             m_close = AddUIComponent<UIButton>();

@@ -1,4 +1,5 @@
 ﻿using ColossalFramework.UI;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -82,6 +83,7 @@ namespace AmericanRoadSigns.GUI
             gantryLabel.textScale = 0.8f;
             gantryLabel.padding = new RectOffset(0, 0, 0, 5);
             _gantryDropdown = UIUtils.CreateStyledDropDown(gantryContainer);
+            _gantryDropdown.name = "gantryDropdown";
             _gantryDropdown.width = 105f;
             _gantryDropdown.height = 24f;
             _gantryDropdown.relativePosition = new Vector3(145, -6);
@@ -89,14 +91,14 @@ namespace AmericanRoadSigns.GUI
             _gantryDropdown.AddItem("Vanilla");
             _gantryDropdown.AddItem("Hide");
             _gantryDropdown.selectedIndex = AmericanRoadsignsTool.config.rendermode_highwaygantry;
+
             _gantryDropdown.eventSelectedIndexChanged += (c, i) =>
             {
                 if (!isInitialized)
                 {
                     return;
                 }
-                //AmericanRoadsignsTool.config.rendermode_highwaygantry = i;
-                //AmericanRoadsignsTool.SaveConfig();
+                DropdownChanged(c, i);
             };
 
             //  Alternative highway gantry sign texture:
@@ -122,6 +124,7 @@ namespace AmericanRoadSigns.GUI
             highwayLabel.textScale = 0.8f;
             highwayLabel.padding = new RectOffset(0, 0, 0, 5);
             _highwayDropdown = UIUtils.CreateStyledDropDown(highwayContainer);
+            _highwayDropdown.name = "highwayDropdown";
             _highwayDropdown.width = 105f;
             _highwayDropdown.height = 24f;
             _highwayDropdown.relativePosition = new Vector3(145, -6);
@@ -135,8 +138,7 @@ namespace AmericanRoadSigns.GUI
                 {
                     return;
                 }
-                //AmericanRoadsignsTool.config.rendermode_highwaysign = i;
-                //AmericanRoadsignsTool.SaveConfig();
+                DropdownChanged(c, i);
             };
 
             //  No parking signs:
@@ -152,6 +154,7 @@ namespace AmericanRoadSigns.GUI
             noparkingLabel.textScale = 0.8f;
             noparkingLabel.padding = new RectOffset(0, 0, 0, 5);
             _noparkingDropdown = UIUtils.CreateStyledDropDown(noparkingContainer);
+            _noparkingDropdown.name = "noparkingDropdown";
             _noparkingDropdown.width = 105f;
             _noparkingDropdown.height = 24f;
             _noparkingDropdown.relativePosition = new Vector3(145, -6);
@@ -165,8 +168,7 @@ namespace AmericanRoadSigns.GUI
                 {
                     return;
                 }
-                //AmericanRoadsignsTool.config.rendermode_noparking = i;
-                //AmericanRoadsignsTool.SaveConfig();
+                DropdownChanged(c, i);
             };
 
             //  No turning signs:
@@ -182,6 +184,7 @@ namespace AmericanRoadSigns.GUI
             turningLabel.textScale = 0.8f;
             turningLabel.padding = new RectOffset(0, 0, 0, 5);
             _turningDropdown = UIUtils.CreateStyledDropDown(turningContainer);
+            _turningDropdown.name = "turningDropdown";
             _turningDropdown.width = 105f;
             _turningDropdown.height = 24f;
             _turningDropdown.relativePosition = new Vector3(145, -6);
@@ -195,8 +198,7 @@ namespace AmericanRoadSigns.GUI
                 {
                     return;
                 }
-                //AmericanRoadsignsTool.config.rendermode_noturnings = i;
-                //AmericanRoadsignsTool.SaveConfig();
+                DropdownChanged(c, i);
             };
 
             //  Speed limit signs:
@@ -212,6 +214,7 @@ namespace AmericanRoadSigns.GUI
             speedlimitLabel.textScale = 0.8f;
             speedlimitLabel.padding = new RectOffset(0, 0, 0, 5);
             _speedlimitDropdown = UIUtils.CreateStyledDropDown(speedlimitContainer);
+            _speedlimitDropdown.name = "speedlimitDropdown";
             _speedlimitDropdown.width = 105f;
             _speedlimitDropdown.height = 24f;
             _speedlimitDropdown.relativePosition = new Vector3(145, -6);
@@ -225,8 +228,7 @@ namespace AmericanRoadSigns.GUI
                 {
                     return;
                 }
-                //AmericanRoadsignsTool.config.rendermode_speedlimits = i;
-                //AmericanRoadsignsTool.SaveConfig();
+                DropdownChanged(c, i);
             };
 
             //  Street name signs:
@@ -242,6 +244,7 @@ namespace AmericanRoadSigns.GUI
             streetnameLabel.textScale = 0.8f;
             streetnameLabel.padding = new RectOffset(0, 0, 0, 5);
             _streetnameDropdown = UIUtils.CreateStyledDropDown(streetnameContainer);
+            _streetnameDropdown.name = "_streetnameDropdown";
             _streetnameDropdown.width = 105f;
             _streetnameDropdown.height = 24f;
             _streetnameDropdown.relativePosition = new Vector3(145, -6);
@@ -255,8 +258,7 @@ namespace AmericanRoadSigns.GUI
                 {
                     return;
                 }
-                //AmericanRoadsignsTool.config.rendermode_streetname = i;
-                //AmericanRoadsignsTool.SaveConfig();
+                DropdownChanged(c, i);
             };
         }
 
@@ -269,9 +271,74 @@ namespace AmericanRoadSigns.GUI
             //  
             if (trigger == _textureCheckbox)
             {
-                //AmericanRoadsignsTool.config.rendermode_highwaygantry_usealt = isChecked;
-                //AmericanRoadsignsTool.SaveConfig();
+                //  Only for Americanized texture:
+                //if (AmericanRoadsignsTool.config.rendermode_highwaygantry != 0)
+                //{
+                //    return;
+                //}
+                AmericanRoadsignsTool.config.rendermode_highwaygantry_usealt = isChecked;
+                CustomizableRoadsignItem affectedSign = AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "motorway overroad signs").FirstOrDefault();
+                AmericanRoadsignsTool.ChangeRoadsignPropWithoutCustomAsset(affectedSign, 0);
+                //  
+                AmericanRoadsignsTool.SaveConfig();
+                //  
+                _gantryDropdown.selectedIndex = 0;
             }
+        }
+
+        private void DropdownChanged(UIComponent trigger, int selectedValue)
+        {
+            if (!isInitialized)
+            {
+                return;
+            }
+            DebugUtils.Log($"DropdownChanged: name = {trigger.name}, selected value is {selectedValue}.");
+            //  
+            CustomizableRoadsignItem affectedSign = new CustomizableRoadsignItem();
+            List<CustomizableRoadsignItem> affectedSigns = new List<CustomizableRoadsignItem>();
+            if (trigger == _gantryDropdown)
+            {
+                affectedSign = AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "motorway overroad signs").FirstOrDefault();
+                AmericanRoadsignsTool.ChangeRoadsignPropWithoutCustomAsset(affectedSign, selectedValue);
+                AmericanRoadsignsTool.config.rendermode_highwaygantry = selectedValue;
+            }
+            else if (trigger == _highwayDropdown)
+            {
+                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "motorway sign").FirstOrDefault());
+                AmericanRoadsignsTool.ChangeRoadsignPropWithCustomAsset(affectedSigns, selectedValue);
+                AmericanRoadsignsTool.config.rendermode_highwaysign = selectedValue;
+            }
+            else if (trigger == _noparkingDropdown)
+            {
+                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "no parking sign").FirstOrDefault());
+                AmericanRoadsignsTool.ChangeRoadsignPropWithCustomAsset(affectedSigns, selectedValue);
+                AmericanRoadsignsTool.config.rendermode_noparking = selectedValue;
+            }
+            else if (trigger == _turningDropdown)
+            {
+                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "no left turn sign").FirstOrDefault());
+                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "no right turn sign").FirstOrDefault());
+                AmericanRoadsignsTool.ChangeRoadsignPropWithCustomAsset(affectedSigns, selectedValue);
+                AmericanRoadsignsTool.config.rendermode_noturnings = selectedValue;
+            }
+            else if (trigger == _speedlimitDropdown)
+            {
+                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "30 speed limit").FirstOrDefault());
+                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "40 speed limit").FirstOrDefault());
+                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "50 speed limit").FirstOrDefault());
+                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "60 speed limit").FirstOrDefault());
+                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "100 speed limit").FirstOrDefault());
+                AmericanRoadsignsTool.ChangeRoadsignPropWithCustomAsset(affectedSigns, selectedValue);
+                AmericanRoadsignsTool.config.rendermode_speedlimits = selectedValue;
+            }
+            else if (trigger == _streetnameDropdown)
+            {
+                affectedSign = AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "street name sign").FirstOrDefault();
+                AmericanRoadsignsTool.ChangeRoadsignPropWithoutCustomAsset(affectedSign, selectedValue);
+                AmericanRoadsignsTool.config.rendermode_streetname = selectedValue;
+            }
+            //  
+            AmericanRoadsignsTool.SaveConfig();
         }
     }
 }

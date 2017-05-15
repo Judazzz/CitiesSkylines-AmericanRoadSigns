@@ -1,8 +1,8 @@
 [h1]About this mod[/h1]
-[quote]American RoadSigns is a stripped-down version of hyperdrive_engaged's original [url=http://steamcommunity.com/sharedfiles/filedetails/?id=418637762]American Roads[/url], which is no longer supported, and unfortunately causes some issues for some players.
+[quote]American RoadSigns is a both stripped-down and enhanced version of hyperdrive_engaged's original [url=http://steamcommunity.com/sharedfiles/filedetails/?id=418637762]American Roads[/url], which is no longer supported, and unfortunately causes some issues for some players.
 The good news is that recently an American Roads texture pack for Roads United was released, with (almost) full Network Extensions, the bad news was that Roads United focuses primarily on the road texturing part. That means that the lovely Americanized road signs that were part of American Roads were no longer present.
 
-And that's how this mod came to be: I stripped the code of American Roads of everything textures-related, and thus American Roads became American RoadSigns.[/quote]
+And that's how this mod came to be: I stripped the code of American Roads of everything that was road texture-related, and thus American Roads became American RoadSigns. Later, I made the functionality available in-game and added new features such as options to change the visibility of various road-side props such as info terminals, electricity boxes and fire hydrants. This means the name "American Roadsigns" is no longer 100% accurate (the mod does more than its name promises), but I decided to stick with it to avoid confusion.[/quote]
 
 
 [h1]Compatibility[/h1]
@@ -15,34 +15,21 @@ Other than that I haven't noticed any incompatibilities: if you do, please repor
 
 [b]Source:[/b] [url=https://github.com/Judazzz/CitiesSkylines-UltimateEyecandy]Github[/url]
 
-[h1]Updates[/h1]
+[h1]Most recent updates[/h1]
 [quote]
+[b][i]May 6th, 2017 - v2.0.0[/i][/b]
+Feature Update 2.0.0 is a complete overhaul of the mod:
+- all options are now available in-game, and can be accessed through a brandnew mod UI;
+- all options except preferred keyboard shortcut and enabling debug output are no longer available in the options window;
+- all features are now applied in real-time, instead of when your city loads. This means you can change as much as you want, and immedeately see the result in-game;
+- compatibility with European maps has been restored;
+- various minor bugfixes, tweaks and improvements.
+
+[b][i]March 16th, 2017 - v1.1.2[/i][/b]
+Update 1.1.2 disabled sign replacement for European maps (causing inexplicable errors).
+
 [b][i]December 5th, 2016 - v1.1.1[/i][/b]
 Update 1.1.1 disabled this mod for all editors (only available in-game).
 
-[b][i]November 30th, 2016 - v1.1.0[/i][/b]
-Update 1.1.0 added support for C:SL 1.6.0 (Natural Disasters).
-
-[b][i]November 19th, 2016 - v1.0.4[/i][/b]
-Update 1.0.4 added five new options, that enable you to:
-- remove electricity box props from road sides;
-- remove fire hydrant props from road sides;
-- remove info terminal props from road sides;
-- remove parking meter props from road sides;
-- remove random street props from road sides;
-It also fixed a bug related to removing manhole covers from highways/ramps, elevated roads and bridges (as in: it now actually works);
-- [b]NOTE[/b]: by default manhole covers and road side props are enabled!
-
-[b][i]July 14th, 2016 - v1.0.3[/i][/b]
-Update 1.0.3 added three new options, that enable you to:
-- remove manholes from highways;
-- remove manholes from bridges and elevated roads;
-- use an alternative highway overhead gantry texture.
-
-[b][i]May 26th, 2016 - v1.0.2[/i][/b]
-Update 1.0.2 added a 'render mode' setting for each prop: American, Vanilla or hidden (see 1st screenshot).
-Note: the settings will be applied once when loading a city. This means that changes made when in-game will not be applied until you restart the map.
-
-[b][i]May 25th, 2016 - v1.0.1[/i][/b]
-Update 1.0.1 re-organized the file structure and added more description data to output_log.txt.
-More info [url=http://steamcommunity.com/sharedfiles/filedetails/changelog/690066392]here[/url].[/quote]
+[b]Full update history[/b]
+- [url=http://steamcommunity.com/sharedfiles/filedetails/changelog/690066392]Change log[/url][/quote]

@@ -148,60 +148,42 @@ namespace AmericanRoadSigns.GUI
             //  
             if (trigger == _manholeHighwayCheckbox)
             {
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (pre).");
                 AmericanRoadsignsTool.ChangeLanePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "manhole").FirstOrDefault(), isChecked, "highway");
                 AmericanRoadsignsTool.config.enable_manholes_highway = isChecked;
-                AmericanRoadsignsTool.SaveConfig();
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (post).");
             }
             else if (trigger == _manholeElevatedCheckbox)
             {
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (pre).");
                 AmericanRoadsignsTool.ChangeLanePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "manhole").FirstOrDefault(), isChecked, "elevated");
                 AmericanRoadsignsTool.config.enable_manholes_elevated = isChecked;
-                AmericanRoadsignsTool.SaveConfig();
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (post).");
             }
             else if (trigger == _electricityBoxCheckbox)
             {
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (pre).");
-                AmericanRoadsignsTool.ChangeLanePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "electricity box").FirstOrDefault(), isChecked);
+                AmericanRoadsignsTool.ChangeRoadSidePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "electricity box").FirstOrDefault(), isChecked);
                 AmericanRoadsignsTool.config.enable_streetprops_electricitybox = isChecked;
-                AmericanRoadsignsTool.SaveConfig();
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (post).");
             }
             else if (trigger == _fireHydrantCheckbox)
             {
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (pre).");
-                AmericanRoadsignsTool.ChangeLanePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "fire hydrant").FirstOrDefault(), isChecked);
+
+                AmericanRoadsignsTool.ChangeRoadSidePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "fire hydrant").FirstOrDefault(), isChecked);
                 AmericanRoadsignsTool.config.enable_streetprops_firehydrant = isChecked;
-                AmericanRoadsignsTool.SaveConfig();
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (post).");
             }
             else if (trigger == _infoTerminalCheckbox)
             {
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (pre).");
-                AmericanRoadsignsTool.ChangeLanePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "info terminal").FirstOrDefault(), isChecked);
+                AmericanRoadsignsTool.ChangeRoadSidePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "info terminal").FirstOrDefault(), isChecked);
                 AmericanRoadsignsTool.config.enable_streetprops_infoterminal = isChecked;
-                AmericanRoadsignsTool.SaveConfig();
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (post).");
             }
             else if (trigger == _parkingMeterCheckbox)
             {
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (pre).");
-                AmericanRoadsignsTool.ChangeLanePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "parking meter").FirstOrDefault(), isChecked);
+                AmericanRoadsignsTool.ChangeRoadSidePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "parking meter").FirstOrDefault(), isChecked);
                 AmericanRoadsignsTool.config.enable_streetprops_parkingmeter = isChecked;
-                AmericanRoadsignsTool.SaveConfig();
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (post).");
             }
             else if (trigger == _randomPropCheckbox)
             {
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (pre).");
-                AmericanRoadsignsTool.ChangeLanePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "random street prop").FirstOrDefault(), isChecked);
+                AmericanRoadsignsTool.ChangeRoadSidePropVisibility(AmericanRoadsignsTool.vanillaAssets.Where(x => x.name.ToLower() == "random street prop").FirstOrDefault(), isChecked);
                 AmericanRoadsignsTool.config.enable_streetprops_random = isChecked;
-                AmericanRoadsignsTool.SaveConfig();
-                DebugUtils.Log($"[DEBUG] - CHECKCHANGED VALUE = {isChecked} (post).");
             }
+            //  
+            AmericanRoadsignsTool.SaveConfig();
         }
     }
 }
