@@ -35,8 +35,8 @@ namespace AmericanRoadSigns.GUI
             isInteractive = true;
             name = "modMainPanel";
             padding = new RectOffset(10, 10, 4, 4);
-            width = 275;
-            height = 36 + 350 + 5;
+            width = UIUtils.c_modPanelWidth;
+            height = UIUtils.c_modPanelHeight;
             relativePosition = new Vector3(10, 60);
             //  
             SetupControls();
@@ -50,28 +50,30 @@ namespace AmericanRoadSigns.GUI
 
             //  Tabs:
             panelTabs = AddUIComponent<UITabstrip>();
-            panelTabs.relativePosition = new Vector2(10, AmericanRoadsignsTool.TITLE_HEIGHT + AmericanRoadsignsTool.SPACING);
-            panelTabs.size = new Vector2(AmericanRoadsignsTool.WIDTH - (3 * AmericanRoadsignsTool.SPACING), AmericanRoadsignsTool.TABS_HEIGHT);
+            panelTabs.size = new Vector2(UIUtils.c_modPanelInnerWidth, UIUtils.c_tabButtonHeight);
+            panelTabs.relativePosition = new Vector2(UIUtils.c_spacing, UIUtils.c_titleBarHeight + UIUtils.c_spacing);
 
             //  Tab Buttons:
             //  Road signs:
             roadSignsButton = UIUtils.CreateTab(panelTabs, "Road signs", true);
             roadSignsButton.tooltip = "";
-            roadSignsButton.textScale = 0.8f;
-            roadSignsButton.width = 130f;
+            roadSignsButton.width = UIUtils.c_tabButtonWidth;
+            roadSignsButton.height = UIUtils.c_tabButtonHeight;
+            roadSignsButton.textScale = 0.9f;
             //  Roadside props:
             roadPropsButton = UIUtils.CreateTab(panelTabs, "Road props");
             roadPropsButton.tooltip = "";
-            roadPropsButton.textScale = 0.8f;
-            roadPropsButton.width = 130f;
+            roadPropsButton.width = UIUtils.c_tabButtonWidth;
+            roadPropsButton.height = UIUtils.c_tabButtonHeight;
+            roadPropsButton.textScale = 0.9f;
             //  Tab Button Events:
             roadSignsButton.eventClick += (c, e) => TabClicked(c, e);
             roadPropsButton.eventClick += (c, e) => TabClicked(c, e);
 
             //  Main Panel:
             UIPanel body = AddUIComponent<UIPanel>();
-            body.width = AmericanRoadsignsTool.WIDTH;
-            body.height = AmericanRoadsignsTool.HEIGHT;
+            body.width = UIUtils.c_modPanelInnerWidth;
+            body.height = UIUtils.c_modPanelInnerHeight;
             //  ScrollRect
             body.relativePosition = new Vector3(5, 36 + 28 + 5);
 
@@ -79,16 +81,16 @@ namespace AmericanRoadSigns.GUI
             //  Road signs Panel:
             roadSignsPanel = body.AddUIComponent<UIRoadSignsPanel>();
             roadSignsPanel.name = "roadSignsPanel";
-            roadSignsPanel.width = AmericanRoadsignsTool.WIDTH - (3 * AmericanRoadsignsTool.SPACING);
-            roadSignsPanel.height = AmericanRoadsignsTool.HEIGHT;
-            roadSignsPanel.relativePosition = new Vector3(5, 0);
+            roadSignsPanel.width = UIUtils.c_modPanelInnerWidth;
+            roadSignsPanel.height = UIUtils.c_modPanelInnerHeight;
+            roadSignsPanel.relativePosition = Vector3.zero;
             roadSignsPanel.isVisible = true;
             //  Roadside props Panel:
             roadPropsPanel = body.AddUIComponent<UIRoadPropsPanel>();
             roadPropsPanel.name = "roadPropsPanel";
-            roadPropsPanel.width = AmericanRoadsignsTool.WIDTH - 3 * AmericanRoadsignsTool.SPACING;
-            roadPropsPanel.height = AmericanRoadsignsTool.HEIGHT;
-            roadPropsPanel.relativePosition = new Vector3(5, 0);
+            roadPropsPanel.width = UIUtils.c_modPanelInnerWidth;
+            roadPropsPanel.height = UIUtils.c_modPanelInnerHeight;
+            roadPropsPanel.relativePosition = Vector3.zero;
             roadPropsPanel.isVisible = false;
         }
 

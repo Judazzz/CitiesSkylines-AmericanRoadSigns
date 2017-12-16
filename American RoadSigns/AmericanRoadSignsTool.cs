@@ -31,11 +31,11 @@ namespace AmericanRoadSigns
         public static string strModLocation;
 
         //  Size Constants:
-        public static float WIDTH = 270;
-        public static float HEIGHT = 350;
-        public static float SPACING = 5;
-        public static float TITLE_HEIGHT = 36;
-        public static float TABS_HEIGHT = 28;
+        //public static float WIDTH = 270;
+        //public static float HEIGHT = 350;
+        //public static float SPACING = 5;
+        //public static float TITLE_HEIGHT = 36;
+        //public static float TABS_HEIGHT = 28;
 
         //  'Reference Library' Members:
         public static string[] IncludedDependencies = new string[] {
@@ -551,8 +551,6 @@ namespace AmericanRoadSigns
                                 {
                                     list.Add(prop);
                                 }
-                                else { DebugUtils.Log($"[DEBUG] - {prop.m_prop.name} (highway): m_maxRenderDistance = {prop.m_prop.m_maxRenderDistance}, m_maxScale = {prop.m_prop.m_maxScale}, m_minScale = {prop.m_prop.m_minScale}.");
-                                }
                             }
                             if (list.m_size > 0)
                             {
@@ -580,10 +578,6 @@ namespace AmericanRoadSigns
                                 if (!prop.m_prop.name.ToLower().Equals("manhole"))
                                 {
                                     list.Add(prop);
-                                }
-                                else
-                                {
-                                    DebugUtils.Log($"[DEBUG] - {prop.m_prop.name} (elevated): m_maxRenderDistance = {prop.m_prop.m_maxRenderDistance}, m_maxScale = {prop.m_prop.m_maxScale}, m_minScale = {prop.m_prop.m_minScale}.");
                                 }
                             }
                             if (list.m_size > 0)

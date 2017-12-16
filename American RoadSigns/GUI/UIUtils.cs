@@ -9,6 +9,25 @@ namespace AmericanRoadSigns.GUI
         // Figuring all this was a pain (no documentation whatsoever)
         // So if your are using it for your mod consider thanking me (SamsamTS)
         // Extended Public Transport UI's code helped me a lot so thanks a lot AcidFire
+        public static float c_modPanelWidth = 400f;
+        public static float c_modPanelHeight = 625f;
+
+        public static float c_modPanelInnerWidth = 390f;
+        public static float c_modPanelInnerHeight = 555f;
+
+        public static float c_titleBarWidth = 400f;
+        public static float c_titleBarHeight = 36f;
+        public static float c_titleBarLabelWidth = 360f;
+        public static float c_titleBarLabelHeight = 36f;
+        public static float c_titleBarLabelXPos = 15f;
+        public static float c_titleBarCloseButtonXPos = 370f;
+
+        public static float c_tabButtonWidth = 194.5f;
+        public static float c_tabButtonHeight = 28f;
+        public static float c_tabPanelWidth = 390f;
+        public static float c_tabPanelHeight = 555f;
+
+        public static float c_spacing = 5;
 
         public static UIButton CreateButton(UIComponent parent)
         {
@@ -97,14 +116,14 @@ namespace AmericanRoadSigns.GUI
         public static UICheckBox CreateCheckBox(UIComponent parent)
         {
             UICheckBox checkBox = parent.AddUIComponent<UICheckBox>();
-            checkBox.width = parent.width - (2 * AmericanRoadsignsTool.SPACING);
+            checkBox.width = parent.width - 10;
             checkBox.height = 20f;
-            checkBox.relativePosition = new Vector3(5, 21);
+            checkBox.relativePosition = new Vector3(5, 0);
 
             UISprite sprite = checkBox.AddUIComponent<UISprite>();
             sprite.spriteName = "InfoIconBaseHovered";
             sprite.size = new Vector2(16f, 16f);
-            sprite.relativePosition = new Vector3(229, 0);
+            sprite.relativePosition = new Vector3(355, 0);
 
             checkBox.checkedBoxObject = sprite.AddUIComponent<UISprite>();
             ((UISprite)checkBox.checkedBoxObject).spriteName = "InfoIconBaseFocused";
@@ -113,9 +132,9 @@ namespace AmericanRoadSigns.GUI
 
             checkBox.label = checkBox.AddUIComponent<UILabel>();
             checkBox.autoSize = false;
-            checkBox.label.textScale = 0.8f;
+            checkBox.label.textScale = 0.9f;
             checkBox.label.width = parent.width - 22;
-            checkBox.label.relativePosition = new Vector3(0, 3);
+            checkBox.label.relativePosition = Vector2.zero;
 
             return checkBox;
         }
@@ -259,7 +278,7 @@ namespace AmericanRoadSigns.GUI
             dropDown.textColor = new Color32(255, 255, 255, 255);
             dropDown.popupColor = new Color32(255, 255, 255, 255);
             dropDown.popupTextColor = new Color32(255, 255, 255, 255);
-            dropDown.textScale = 0.8f;
+            dropDown.textScale = 0.9f;
             dropDown.verticalAlignment = UIVerticalAlignment.Middle;
             dropDown.horizontalAlignment = UIHorizontalAlignment.Left;
             dropDown.textFieldPadding = new RectOffset(4, 0, 7, 0);

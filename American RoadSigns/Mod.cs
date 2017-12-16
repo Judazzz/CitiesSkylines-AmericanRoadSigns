@@ -7,7 +7,7 @@ namespace AmericanRoadSigns
     public class Mod : IUserMod
     {
         public const ulong workshop_id = 690066392;
-        public const string version = "2.0.0";
+        public const string version = "2.1.0";
 
         public string Name
         {

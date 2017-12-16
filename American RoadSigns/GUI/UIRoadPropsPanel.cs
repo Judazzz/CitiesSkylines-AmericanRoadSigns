@@ -81,7 +81,7 @@ namespace AmericanRoadSigns.GUI
             //  Manhole covers on elevated roads:
             var manholeElevatedContainer = UIUtils.CreateFormElement(this, "center");
             manholeElevatedContainer.name = "manholeElevatedContainer";
-            manholeElevatedContainer.relativePosition = new Vector3(0, 55);
+            manholeElevatedContainer.relativePosition = new Vector3(0, 70);
             _manholeElevatedCheckbox = UIUtils.CreateCheckBox(manholeElevatedContainer);
             _manholeElevatedCheckbox.relativePosition = new Vector3(5, 17);
             _manholeElevatedCheckbox.label.text = "Manhole covers on bridges";
@@ -91,7 +91,7 @@ namespace AmericanRoadSigns.GUI
             //  Electricity boxes:
             var electricityBoxContainer = UIUtils.CreateFormElement(this, "center");
             electricityBoxContainer.name = "electricityBoxContainer";
-            electricityBoxContainer.relativePosition = new Vector3(0, 90);
+            electricityBoxContainer.relativePosition = new Vector3(0, 120);
             _electricityBoxCheckbox = UIUtils.CreateCheckBox(electricityBoxContainer);
             _electricityBoxCheckbox.relativePosition = new Vector3(5, 17);
             _electricityBoxCheckbox.label.text = "Electricity box props";
@@ -101,7 +101,7 @@ namespace AmericanRoadSigns.GUI
             //  Fire hydrants:
             var fireHydrantContainer = UIUtils.CreateFormElement(this, "center");
             fireHydrantContainer.name = "fireHydrantContainer";
-            fireHydrantContainer.relativePosition = new Vector3(0, 125);
+            fireHydrantContainer.relativePosition = new Vector3(0, 170);
             _fireHydrantCheckbox = UIUtils.CreateCheckBox(fireHydrantContainer);
             _fireHydrantCheckbox.relativePosition = new Vector3(5, 17);
             _fireHydrantCheckbox.label.text = "Fire hydrant props";
@@ -111,7 +111,7 @@ namespace AmericanRoadSigns.GUI
             //  Information terminals:
             var infoTerminalContainer = UIUtils.CreateFormElement(this, "center");
             infoTerminalContainer.name = "infoTerminalContainer";
-            infoTerminalContainer.relativePosition = new Vector3(0, 160);
+            infoTerminalContainer.relativePosition = new Vector3(0, 220);
             _infoTerminalCheckbox = UIUtils.CreateCheckBox(infoTerminalContainer);
             _infoTerminalCheckbox.relativePosition = new Vector3(5, 17);
             _infoTerminalCheckbox.label.text = "Info terminal props";
@@ -121,7 +121,7 @@ namespace AmericanRoadSigns.GUI
             //  Parking meters:
             var parkingMeterContainer = UIUtils.CreateFormElement(this, "center");
             parkingMeterContainer.name = "parkingMeterContainer";
-            parkingMeterContainer.relativePosition = new Vector3(0, 195);
+            parkingMeterContainer.relativePosition = new Vector3(0, 270);
             _parkingMeterCheckbox = UIUtils.CreateCheckBox(parkingMeterContainer);
             _parkingMeterCheckbox.relativePosition = new Vector3(5, 17);
             _parkingMeterCheckbox.label.text = "Parking meter props";
@@ -131,7 +131,7 @@ namespace AmericanRoadSigns.GUI
             //  Random street props:
             var randomPropContainer = UIUtils.CreateFormElement(this, "center");
             randomPropContainer.name = "randomPropContainer";
-            randomPropContainer.relativePosition = new Vector3(0, 230);
+            randomPropContainer.relativePosition = new Vector3(0, 320);
             _randomPropCheckbox = UIUtils.CreateCheckBox(randomPropContainer);
             _randomPropCheckbox.relativePosition = new Vector3(5, 17);
             _randomPropCheckbox.label.text = "Random street props";

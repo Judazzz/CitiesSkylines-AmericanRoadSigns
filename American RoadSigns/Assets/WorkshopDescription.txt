@@ -17,6 +17,9 @@ Other than that I haven't noticed any incompatibilities: if you do, please repor
 
 [h1]Most recent updates[/h1]
 [quote]
+[b][i]December 16th, 2017 - v2.1.0[/i][/b]
+- Increased the UI size by 50%.
+
 [b][i]May 6th, 2017 - v2.0.0[/i][/b]
 Feature Update 2.0.0 is a complete overhaul of the mod:
 - all options are now available in-game, and can be accessed through a brandnew mod UI;
@@ -26,10 +29,7 @@ Feature Update 2.0.0 is a complete overhaul of the mod:
 - various minor bugfixes, tweaks and improvements.
 
 [b][i]March 16th, 2017 - v1.1.2[/i][/b]
-Update 1.1.2 disabled sign replacement for European maps (causing inexplicable errors).
-
-[b][i]December 5th, 2016 - v1.1.1[/i][/b]
-Update 1.1.1 disabled this mod for all editors (only available in-game).
+- Update 1.1.2 disabled sign replacement for European maps (causing inexplicable errors).
 
 [b]Full update history[/b]
 - [url=http://steamcommunity.com/sharedfiles/filedetails/changelog/690066392]Change log[/url][/quote]

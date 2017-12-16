@@ -45,8 +45,8 @@ namespace AmericanRoadSigns.GUI
 
         private void SetupControls()
         {
-            width = parent.width;
-            height = 40;
+            width = UIUtils.c_titleBarLabelWidth;
+            height = UIUtils.c_titleBarLabelHeight;
             isVisible = true;
             canFocus = true;
             isInteractive = true;
@@ -54,14 +54,13 @@ namespace AmericanRoadSigns.GUI
 
             m_drag = AddUIComponent<UIDragHandle>();
             m_drag.width = width;
-            m_drag.width = AmericanRoadsignsTool.WIDTH + 5;
             m_drag.height = height;
             m_drag.relativePosition = Vector3.zero;
             m_drag.target = parent;
 
             m_title = AddUIComponent<UILabel>();
-            m_title.width = width;
-            m_title.relativePosition = new Vector3(0, 13);
+            m_title.width = UIUtils.c_titleBarLabelWidth;
+            m_title.relativePosition = new Vector3(UIUtils.c_titleBarLabelXPos, 13);
             m_title.text = title;
             m_title.textAlignment = UIHorizontalAlignment.Center;
             m_title.textScale = 0.9f;
@@ -70,7 +69,7 @@ namespace AmericanRoadSigns.GUI
 
             m_close = AddUIComponent<UIButton>();
             m_close.size = new Vector2(17, 17);
-            m_close.relativePosition = new Vector3(width - 25, 12);
+            m_close.relativePosition = new Vector3(UIUtils.c_titleBarCloseButtonXPos, 12);
             m_close.normalBgSprite = "IconError";
             m_close.hoveredBgSprite = "IconError";
             m_close.pressedBgSprite = "IconError";
