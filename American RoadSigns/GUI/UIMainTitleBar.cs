@@ -60,6 +60,7 @@ namespace AmericanRoadSigns.GUI
 
             m_title = AddUIComponent<UILabel>();
             m_title.width = UIUtils.c_titleBarLabelWidth;
+            m_title.height = UIUtils.c_titleBarLabelHeight;
             m_title.relativePosition = new Vector3(UIUtils.c_titleBarLabelXPos, 13);
             m_title.text = title;
             m_title.textAlignment = UIHorizontalAlignment.Center;

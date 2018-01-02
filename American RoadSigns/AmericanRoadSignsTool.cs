@@ -30,14 +30,8 @@ namespace AmericanRoadSigns
         public static string ModPath;
         public static string strModLocation;
 
-        //  Size Constants:
-        //public static float WIDTH = 270;
-        //public static float HEIGHT = 350;
-        //public static float SPACING = 5;
-        //public static float TITLE_HEIGHT = 36;
-        //public static float TABS_HEIGHT = 28;
-
         //  'Reference Library' Members:
+        //  Included assets and textures:
         public static string[] IncludedDependencies = new string[] {
             "motorway-overroad-signs.dds",
             "motorway-overroad-signs-motorway-overroad-signs-aci.dds",
@@ -53,6 +47,154 @@ namespace AmericanRoadSigns
             "us no right turn.crp",
             "us no parking.crp"
         };
+        //  Highway Networks:
+        public static string[] HighwayNetworksWithoutManholes = new string[] {
+            "1242750637.HighwayRampElevated1", // Highways
+            "1242750637.HighwayRampElevated0",
+            "1242750637.HighwayRamp Tunnel0",
+            "1242750637.HighwayRamp Slope0",
+            "Large Highway Slope",
+            "Large Highway Tunnel",
+            "Large Highway Bridge",
+            "Large Highway Elevated",
+            "Large Highway",
+            "Five-Lane Highway Slope",
+            "Five-Lane Highway Tunnel",
+            "Five-Lane Highway Bridge",
+            "Five-Lane Highway Elevated",
+            "Five-Lane Highway",
+            "Four-Lane Highway Slope",
+            "Four-Lane Highway Tunnel",
+            "Four-Lane Highway Bridge",
+            "Four-Lane Highway Elevated",
+            "Four-Lane Highway",
+            "Highway2L2W Slope",
+            "Highway2L2W Tunnel",
+            "Highway2L2W Bridge",
+            "Highway2L2W Elevated",
+            "Highway2L2W",
+            "AsymHighwayL1R2 Slope",
+            "AsymHighwayL1R2 Tunnel",
+            "AsymHighwayL1R2 Bridge",
+            "AsymHighwayL1R2 Elevated",
+            "AsymHighwayL1R2",
+            "Rural Highway Slope",
+            "Rural Highway Tunnel",
+            "Rural Highway Bridge",
+            "Rural Highway Elevated",
+            "Rural Highway",
+            "Small Rural Highway Slope",
+            "Small Rural Highway Tunnel",
+            "Small Rural Highway Bridge",
+            "Small Rural Highway Elevated",
+            "Small Rural Highway",
+            "Highway Barrier",
+            "Highway Bridge",
+            "Highway Elevated",
+            "Highway Slope",
+            "Highway Tunnel",
+            "Highway",
+            "HighwayRamp Slope",
+            "HighwayRamp Tunnel",
+            "HighwayRamp",
+            "HighwayRampElevated",
+            "Four Lane Highway Barrier",
+            "Four Lane Highway Bridge",
+            "Four Lane Highway Elevated",
+            "Four Lane Highway Slope",
+            "Four Lane Highway Tunnel",
+            "Four Lane Highway",
+            "Two Lane Highway Barrier",
+            "Two Lane Highway Bridge",
+            "Two Lane Highway Elevated",
+            "Two Lane Highway Slope",
+            "Two Lane Highway Tunnel",
+            "Two Lane Highway",
+            "Two Lane Highway Twoway Barrier",
+            "Two Lane Highway Twoway Bridge",
+            "Two Lane Highway Twoway Elevated",
+            "Two Lane Highway Twoway Slope",
+            "Two Lane Highway Twoway Tunnel",
+            "Two Lane Highway Twoway"
+        };
+        //  Elevated/Bridge Networks:
+        public static string[] RoadNetworksWithoutManholes = new string[] {
+            "Eight-Lane Avenue Bridge", // Regular Roads
+            "Eight-Lane Avenue Elevated",
+            "Six-Lane Avenue Median Bridge",
+            "Six-Lane Avenue Median Elevated",
+            "Medium Avenue TL Bridge",
+            "Medium Avenue TL Elevated",
+            "Medium Avenue Bridge",
+            "Medium Avenue Elevated",
+            "Oneway4L Bridge",
+            "Oneway4L Elevated",
+            "AsymRoadL1R3 Bridge",
+            "AsymRoadL1R3 Elevated",
+            "AsymAvenueL2R3 Bridge",
+            "AsymAvenueL2R3 Elevated",
+            "AsymAvenueL2R4 Bridge",
+            "AsymAvenueL2R4 Elevated",
+            "Small Avenue Bridge",
+            "Small Avenue Elevated",
+            "Oneway3L Bridge",
+            "Oneway3L Elevated",
+            "BasicRoadMdn Bridge",
+            "BasicRoadMdn Elevated",
+            "AsymRoadL1R2 Bridge",
+            "AsymRoadL1R2 Elevated",
+            "BasicRoadTL Bridge",
+            "BasicRoadTL Elevated",
+            "BasicRoadPntMdn Bridge",
+            "BasicRoadPntMdn Elevated",
+            "Large Oneway Bridge",
+            "Large Oneway Elevated",
+            "Large Road Bridge",
+            "Large Road Elevated",
+            "Medium Road Bridge",
+            "Medium Road Elevated",
+            "Basic Road Bridge",
+            "Basic Road Elevated",
+            "Oneway Road Bridge",
+            "Oneway Road Elevated",
+            "Asymmetrical Three Lane Road Bridge",
+            "Asymmetrical Three Lane Road Elevated",
+            "Avenue Large With Buslanes Grass Bridge",
+            "Avenue Large With Buslanes Grass Elevated",
+            "Avenue Large With Grass Bridge",
+            "Avenue Large With Grass Elevated",
+            //"Large Road Bridge With Bus Lanes", // Roads with Bus Lanes
+            //"Large Road Elevated With Bus Lanes",
+            //"Small Busway OneWay Bridge",
+            //"Small Busway OneWay Elevated",
+            //"Small Busway Bridge",
+            //"Small Busway Elevated",
+            //"Large Road Bridge Bus",
+            //"Large Road Elevated Bus",
+            //"Medium Road Bridge Bus",
+            //"Medium Road Elevated Bus",
+            //"Medium Road Bridge Tram", // Roads with Tram Tracks
+            //"Medium Road Elevated Tram",
+            //"Basic Road Bridge Tram",
+            //"Basic Road Elevated Tram",
+            //"Oneway Road Bridge Tram",
+            //"Oneway Road Elevated Tram",
+            //"Oneway Tram Track Bridge",
+            //"Oneway Tram Track Elevated",
+            //"Tram Track Bridge",
+            //"Tram Track Elevated",
+            //"Medium Road Monorail Elevated", // Roads with Monorail Tracks
+            //"Small Road Monorail Bridge",
+            //"Small Road Monorail Elevated",
+            //"Oneway with bicycle lanes Bridge", // Roads with Bike Lanes
+            //"Oneway with bicycle lanes Elevated",
+            //"Large Road Bridge Bike",
+            //"Large Road Elevated Bike",
+            //"Medium Road Bridge Bike",
+            //"Medium Road Elevated Bike",
+            //"Basic Road Bridge Bike",
+            //"Basic Road Elevated Bike",
+        };
 
         public static Texture gantryMainTexture = new Texture();
         public static Texture gantryACITexture = new Texture();
@@ -67,6 +209,8 @@ namespace AmericanRoadSigns
         //  
         public static void Reset()
         {
+            CustomizableRoadsignsList.Clear();
+            //
             var go = FindObjectOfType<AmericanRoadsignsTool>();
             if (go != null)
             {
@@ -454,15 +598,10 @@ namespace AmericanRoadSigns
                             {
                                 prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs.dds")));
                             }
-                            //var tex2 = new Texture2D (1, 1);
-                            //tex2.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs-motorway-overroad-signs-aci.png")));
                             prefab.m_material.SetTexture("_ACIMap", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-motorway-overroad-signs-aci.dds")));
-                            //var tex3 = new Texture2D (1, 1);
-                            //tex3.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs-motorway-overroad-signs-xys.png")));
                             prefab.m_material.SetTexture("_XYSMap", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-motorway-overroad-signs-xys.dds")));
                             prefab.m_lodRenderDistance = 100000;
                             prefab.m_lodMesh = null;
-                            //prefab.m_maxRenderDistance = 12000;
                             prefab.RefreshLevelOfDetail();
                             if (config.enable_debug)
                             {
@@ -485,8 +624,6 @@ namespace AmericanRoadSigns
                     {
                         if (config.rendermode_streetname == 0)
                         {
-                            //var tex = new Texture2D (1, 1);
-                            //tex.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "street-name-sign.png")));
                             prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "street-name-sign.dds")));
                             prefab.m_lodRenderDistance = 100000;
                             prefab.m_lodMesh = null;
@@ -527,82 +664,100 @@ namespace AmericanRoadSigns
             //  Laneprops:
             if (!config.enable_manholes_highway || !config.enable_manholes_elevated)
             {
-                var roads = Resources.FindObjectsOfTypeAll<NetInfo>();
-                foreach (var road in roads)
+                //  Highway manhole covers:
+                if (!config.enable_manholes_highway)
                 {
-                    if (road.m_lanes == null)
+                    var highwayNetworks = Resources.FindObjectsOfTypeAll<NetInfo>().Where(x => HighwayNetworksWithoutManholes.Contains(x.name)).ToList();
+                    foreach (var highwayNetwork in highwayNetworks)
                     {
-                        return;
-                    }
-
-                    //  Highway manhole covers:
-                    if (!config.enable_manholes_highway && road.name.ToLower().Contains("highway"))
-                    {
-                        foreach (var lane in road.m_lanes)
+                        try
                         {
-                            if (lane?.m_laneProps?.m_props == null)
+                            if (highwayNetwork.m_lanes == null || highwayNetwork.m_lanes.Count() == 0)
                             {
                                 continue;
                             }
-                            var list = new FastList<NetLaneProps.Prop>();
-                            foreach (var prop in lane.m_laneProps.m_props)
+                            foreach (var lane in highwayNetwork.m_lanes)
                             {
-                                if (!prop.m_prop.name.ToLower().Equals("manhole"))
+                                if (lane?.m_laneProps?.m_props == null)
                                 {
-                                    list.Add(prop);
+                                    continue;
                                 }
-                            }
-                            if (list.m_size > 0)
-                            {
-                                lane.m_laneProps.m_props = list.ToArray();
-                                if (config.enable_debug)
+                                var list = new FastList<NetLaneProps.Prop>();
+                                foreach (var prop in lane.m_laneProps.m_props)
                                 {
-                                    DebugUtils.Log($"Manhole cover props successfully removed from highway type {road.name}.");
+                                    if (!prop.m_prop.name.ToLower().Equals("manhole"))
+                                    {
+                                        list.Add(prop);
+                                    }
+                                }
+                                if (list.m_size > 0)
+                                {
+                                    lane.m_laneProps.m_props = list.ToArray();
+                                    if (config.enable_debug)
+                                    {
+                                        DebugUtils.Log($"Manhole cover props successfully removed from highway type {highwayNetwork.name}.");
+                                    }
                                 }
                             }
                         }
-                    }
-
-                    //  Elevated road/Bridge manhole covers:
-                    if (!config.enable_manholes_elevated && road.name.ToLower().Contains("bridge") || road.name.ToLower().Contains("elevated"))
-                    {
-                        foreach (var lane in road.m_lanes)
+                        catch
                         {
-                            if (lane?.m_laneProps?.m_props == null)
+                            DebugUtils.Log($"[ERROR] - Failed to remove manhole cover props from highway type {highwayNetwork.name}.");
+                        }
+                    }
+                }
+
+                //  Elevated road/Bridge manhole covers:
+                if (!config.enable_manholes_elevated)
+                {
+                    var roadNetworks = Resources.FindObjectsOfTypeAll<NetInfo>().Where(x => RoadNetworksWithoutManholes.Contains(x.name)).ToList();
+                    foreach (var roadNetwork in roadNetworks)
+                    {
+                        try
+                        {
+                            if (roadNetwork.m_lanes == null || roadNetwork.m_lanes.Count() == 0)
                             {
                                 continue;
                             }
-                            var list = new FastList<NetLaneProps.Prop>();
-                            foreach (var prop in lane.m_laneProps.m_props)
+
+                            foreach (var lane in roadNetwork.m_lanes)
                             {
-                                if (!prop.m_prop.name.ToLower().Equals("manhole"))
+                                if (lane?.m_laneProps?.m_props == null)
                                 {
-                                    list.Add(prop);
+                                    continue;
+                                }
+                                var list = new FastList<NetLaneProps.Prop>();
+                                foreach (var prop in lane.m_laneProps.m_props)
+                                {
+                                    if (!prop.m_prop.name.ToLower().Equals("manhole"))
+                                    {
+                                        list.Add(prop);
+                                    }
+                                }
+                                if (list.m_size > 0)
+                                {
+                                    lane.m_laneProps.m_props = list.ToArray();
+                                    if (config.enable_debug)
+                                    {
+                                        DebugUtils.Log($"Manhole cover props successfully removed from road type {roadNetwork.name}.");
+                                    }
                                 }
                             }
-                            if (list.m_size > 0)
-                            {
-                                lane.m_laneProps.m_props = list.ToArray();
-                                if (config.enable_debug)
-                                {
-                                    DebugUtils.Log($"Manhole cover props successfully removed from road type {road.name}.");
-                                }
-                            }
+                        }
+                        catch
+                        {
+                            DebugUtils.Log($"[ERROR] - Failed to remove manhole cover props from road type {roadNetwork.name}.");
                         }
                     }
                 }
             }
         }
 
-
         //  ROAD SIGN PROPS:
-
         //  Handler for road sign props with custom model (replace/hide):
         public static void ChangeRoadsignPropWithCustomAsset(List<CustomizableRoadsignItem> affectedSigns, int selectedValue, bool addAction = true)
         {
-            DebugUtils.Log($"[DEBUG] - original prop {affectedSigns[0]._originalSign.name}, custom prop {affectedSigns[0]._customSign.name}.");
-
-            var net_collections = FindObjectsOfType<NetCollection>();
+            var roadNetworks = FindObjectsOfType<NetCollection>();
             //  
             Stopwatch ReplacePropsTimer = new Stopwatch();
             ReplacePropsTimer.Start();
@@ -613,23 +768,25 @@ namespace AmericanRoadSigns
                 {
                     if (selectedValue < 2)
                     {   //  Show vanilla/custom:
-                    foreach (var nc in net_collections)
+                        foreach (var roadNetwork in roadNetworks)
                         {
-                        //  Loop Prefabs;
-                        foreach (var prefab in nc.m_prefabs)
+                            //  Loop Prefabs:
+                            foreach (var prefab in roadNetwork.m_prefabs)
                             {
-                            //  Loop lanes if present:
-                            if (prefab.m_lanes != null)
+                                //  Loop lanes if present:
+                                if (prefab.m_lanes == null || prefab.m_lanes.Count() == 0)
                                 {
-                                    foreach (var lane in prefab.m_lanes)
+                                    continue;
+                                }
+                                foreach (var lane in prefab.m_lanes)
+                                {
+                                    if (lane?.m_laneProps?.m_props == null)
                                     {
-                                        if (lane.m_laneProps != null)
-                                        {
-                                            foreach (var affectedSign in affectedSigns)
-                                            {
-                                                ReplaceRoadsignProp(lane.m_laneProps, affectedSign, selectedValue);
-                                            }
-                                        }
+                                        continue;
+                                    }
+                                    foreach (var affectedSign in affectedSigns)
+                                    {
+                                        ReplaceRoadsignProp(lane.m_laneProps, affectedSign, selectedValue);
                                     }
                                 }
                             }
@@ -637,36 +794,38 @@ namespace AmericanRoadSigns
                     }
                     else
                     {   //  Hide
-                    foreach (var nc in net_collections)
+                        foreach (var roadNetwork in roadNetworks)
                         {
-                        //  Loop Prefabs;
-                        foreach (var prefab in nc.m_prefabs)
+                            //  Loop Prefabs:
+                            foreach (var prefab in roadNetwork.m_prefabs)
                             {
-                            //  Loop lanes if present:
-                            if (prefab.m_lanes != null)
+                                //  Loop lanes if present:
+                                if (prefab.m_lanes == null || prefab.m_lanes.Count() == 0)
                                 {
-                                    foreach (var lane in prefab.m_lanes)
+                                    continue;
+                                }
+                                foreach (var lane in prefab.m_lanes)
+                                {
+                                    if (lane?.m_laneProps?.m_props == null)
                                     {
-                                        if (lane.m_laneProps != null)
-                                        {
-                                        //  Loop LaneProps:
-                                        lane.m_laneProps.m_props.ForEach(
-                                                x =>
-                                                {
-                                                    if (x.m_prop != null)
-                                                    {
-                                                        affectedSigns.ForEach(y =>
-                                                        {
-                                                            if (x.m_prop.name == y._originalSign.name || x.m_prop.name == y._customSign.name)
-                                                            {
-                                                                HideRoadsignProp(x);
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                            );
-                                        }
+                                        continue;
                                     }
+                                    //  Loop LaneProps:
+                                    lane.m_laneProps.m_props.ForEach(
+                                        x =>
+                                        {
+                                            if (x.m_prop != null)
+                                            {
+                                                affectedSigns.ForEach(y =>
+                                                {
+                                                    if (x.m_prop.name == y._originalSign.name || x.m_prop.name == y._customSign.name)
+                                                    {
+                                                        HideRoadsignProp(x);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    );
                                 }
                             }
                         }
@@ -677,23 +836,25 @@ namespace AmericanRoadSigns
             {   //  OnLoad, so do not add action to SimulationManager (not available):
                 if (selectedValue < 2)
                 {   //  Show vanilla/custom:
-                    foreach (var nc in net_collections)
+                    foreach (var roadNetwork in roadNetworks)
                     {
-                        //  Loop Prefabs;
-                        foreach (var prefab in nc.m_prefabs)
+                        //  Loop Prefabs:
+                        foreach (var prefab in roadNetwork.m_prefabs)
                         {
                             //  Loop lanes if present:
-                            if (prefab.m_lanes != null)
+                            if (prefab.m_lanes == null || prefab.m_lanes.Count() == 0)
                             {
-                                foreach (var lane in prefab.m_lanes)
+                                continue;
+                            }
+                            foreach (var lane in prefab.m_lanes)
+                            {
+                                if (lane?.m_laneProps?.m_props == null)
                                 {
-                                    if (lane.m_laneProps != null)
-                                    {
-                                        foreach (var affectedSign in affectedSigns)
-                                        {
-                                            ReplaceRoadsignProp(lane.m_laneProps, affectedSign, selectedValue);
-                                        }
-                                    }
+                                    continue;
+                                }
+                                foreach (var affectedSign in affectedSigns)
+                                {
+                                    ReplaceRoadsignProp(lane.m_laneProps, affectedSign, selectedValue);
                                 }
                             }
                         }
@@ -701,36 +862,38 @@ namespace AmericanRoadSigns
                 }
                 else
                 {   //  Hide
-                    foreach (var nc in net_collections)
+                    foreach (var roadNetwork in roadNetworks)
                     {
-                        //  Loop Prefabs;
-                        foreach (var prefab in nc.m_prefabs)
+                        //  Loop Prefabs:
+                        foreach (var prefab in roadNetwork.m_prefabs)
                         {
                             //  Loop lanes if present:
-                            if (prefab.m_lanes != null)
+                            if (prefab.m_lanes == null || prefab.m_lanes.Count() == 0)
                             {
-                                foreach (var lane in prefab.m_lanes)
+                                continue;
+                            }
+                            foreach (var lane in prefab.m_lanes)
+                            {
+                                if (lane?.m_laneProps?.m_props == null)
                                 {
-                                    if (lane.m_laneProps != null)
-                                    {
-                                        //  Loop LaneProps:
-                                        lane.m_laneProps.m_props.ForEach(
-                                                x =>
-                                                {
-                                                    if (x.m_prop != null)
-                                                    {
-                                                        affectedSigns.ForEach(y =>
-                                                        {
-                                                            if (x.m_prop.name == y._originalSign.name || x.m_prop.name == y._customSign.name)
-                                                            {
-                                                                HideRoadsignProp(x);
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                            );
-                                    }
+                                    continue;
                                 }
+                                //  Loop LaneProps:
+                                lane.m_laneProps.m_props.ForEach(
+                                    x =>
+                                    {
+                                        if (x.m_prop != null)
+                                        {
+                                            affectedSigns.ForEach(y =>
+                                            {
+                                                if (x.m_prop.name == y._originalSign.name || x.m_prop.name == y._customSign.name)
+                                                {
+                                                    HideRoadsignProp(x);
+                                                }
+                                            });
+                                        }
+                                    }
+                                );
                             }
                         }
                     }
@@ -920,7 +1083,6 @@ namespace AmericanRoadSigns
 
 
         //  ROADSIDE/LANE PROPS:
-
         //  Show/hide roadside prop:
         public static void ChangeRoadSidePropVisibility(PropInfo affectedProp, bool isVisible)
         {
