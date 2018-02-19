@@ -1,0 +1,10 @@
+﻿var assetname = "crossing2.crossing2_Data"; // steamid.assetname for workshop items
+var asset = PrefabCollection<PropInfo>.FindLoaded(assetname); // PropInfo, BuildingInfo, VehicleInfo, TreeInfo
+
+var vec = new Vector4(0,0,0,0);
+
+vec = new Vector4(0.0f, 2.4f, 0.0f, 200.0f); // Pivot - X, Y, Z, ?
+asset.m_material.SetVector("_RollLocation0", vec);
+
+vec = new Vector4(0.0f, 0.0f, 1.0f, 200.0f); // Rotation Axis - X, Y, Z, ?
+asset.m_material.SetVector("_RollParams0", vec);

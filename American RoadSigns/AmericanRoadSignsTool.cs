@@ -19,6 +19,8 @@ namespace AmericanRoadSigns
 
         public static Configuration config;
         public static bool isGameLoaded;
+        public static bool isNoWorkshop;
+        public static string propPrefix;
 
         //  I/O:
         public static string ConfigFileName;
@@ -236,8 +238,10 @@ namespace AmericanRoadSigns
                 DebugUtils.Log("MainPanel created.");
                 //  Set vars:
                 isGameLoaded = true;
+                isNoWorkshop = PluginManager.noWorkshop;
+                propPrefix = (isNoWorkshop) ? "418637762" : "690066392"; // (local = 418637762, workshop = 690066392)
                 strModLocation = "Workshop";
-                ConfigFileName = (PluginManager.noWorkshop) ? ConfigFileNameLocal : ConfigFileNameOnline;
+                ConfigFileName = (isNoWorkshop) ? ConfigFileNameLocal : ConfigFileNameOnline;
                 DebugUtils.Log($"Currently used config File: {ConfigFileName}.");
             }
             catch (Exception e)
@@ -419,68 +423,73 @@ namespace AmericanRoadSigns
                     CustomizableRoadsignItem roadsignItem = new CustomizableRoadsignItem();
                     roadsignItem._originalSign = new PropInfo();
                     roadsignItem._customSign = new PropInfo();
-                    if (prop.name.ToLower().Contains("speed limit 65"))
+                    if (prop.name.ToLower().Contains($"{propPrefix}.speed limit 65"))
                     {
                         roadsignItem._customSign = prop;
                         roadsignItem._originalSign = PrefabCollection<PropInfo>.FindLoaded("100 Speed Limit");
                         CustomizableRoadsignsList.Add(roadsignItem);
                         workshopAssets.Add(prop);
                     }
-                    else if (prop.name.ToLower().Contains("speed limit 45"))
+                    else if (prop.name.ToLower().Contains($"{propPrefix}.speed limit 45")) //690066392.speed limit 45_Data
                     {
                         roadsignItem._customSign = prop;
                         roadsignItem._originalSign = PrefabCollection<PropInfo>.FindLoaded("60 Speed Limit");
                         CustomizableRoadsignsList.Add(roadsignItem);
                         workshopAssets.Add(prop);
                     }
-                    else if (prop.name.ToLower().Contains("speed limit 30"))
+                    else if (prop.name.ToLower().Contains($"{propPrefix}.speed limit 30")) //690066392.speed limit 30_Data
                     {
                         roadsignItem._customSign = prop;
                         roadsignItem._originalSign = PrefabCollection<PropInfo>.FindLoaded("50 Speed Limit");
                         CustomizableRoadsignsList.Add(roadsignItem);
                         workshopAssets.Add(prop);
                     }
-                    else if (prop.name.ToLower().Contains("speed limit 25"))
+                    else if (prop.name.ToLower().Contains($"{propPrefix}.speed limit 25")) // 690066392.speed limit 25_Data
                     {
                         roadsignItem._customSign = prop;
                         roadsignItem._originalSign = PrefabCollection<PropInfo>.FindLoaded("40 Speed Limit");
                         CustomizableRoadsignsList.Add(roadsignItem);
                         workshopAssets.Add(prop);
                     }
-                    else if (prop.name.ToLower().Contains("speed limit 15"))
+                    else if (prop.name.ToLower().Contains($"{propPrefix}.speed limit 15")) //690066392.speed limit 15_Data
                     {
                         roadsignItem._customSign = prop;
                         roadsignItem._originalSign = PrefabCollection<PropInfo>.FindLoaded("30 Speed Limit");
                         CustomizableRoadsignsList.Add(roadsignItem);
                         workshopAssets.Add(prop);
                     }
-                    else if (prop.name.ToLower().Contains("us interstate sign"))
+                    else if (prop.name.ToLower().Contains($"{propPrefix}.us interstate sign")) //690066392.us interstate sign_Data
                     {
                         roadsignItem._customSign = prop;
                         roadsignItem._originalSign = PrefabCollection<PropInfo>.FindLoaded("Motorway Sign");
                         CustomizableRoadsignsList.Add(roadsignItem);
                         workshopAssets.Add(prop);
                     }
-                    else if (prop.name.ToLower().Contains("us no left turn"))
+                    else if (prop.name.ToLower().Contains($"{propPrefix}.us no left turn")) //690066392.us no left turn_Data
                     {
                         roadsignItem._customSign = prop;
                         roadsignItem._originalSign = PrefabCollection<PropInfo>.FindLoaded("No Left Turn Sign");
                         CustomizableRoadsignsList.Add(roadsignItem);
                         workshopAssets.Add(prop);
                     }
-                    else if (prop.name.ToLower().Contains("us no right turn"))
+                    else if (prop.name.ToLower().Contains($"{propPrefix}.us no right turn")) //690066392.us no right turn_Data
                     {
                         roadsignItem._customSign = prop;
                         roadsignItem._originalSign = PrefabCollection<PropInfo>.FindLoaded("No Right Turn Sign");
                         CustomizableRoadsignsList.Add(roadsignItem);
                         workshopAssets.Add(prop);
                     }
-                    else if (prop.name.ToLower().Contains("us no parking"))
+                    else if (prop.name.ToLower().Contains($"{propPrefix}.us no parking")) //690066392.us no parking_Data
                     {
                         roadsignItem._customSign = prop;
                         roadsignItem._originalSign = PrefabCollection<PropInfo>.FindLoaded("No Parking Sign");
                         CustomizableRoadsignsList.Add(roadsignItem);
                         workshopAssets.Add(prop);
+                    }
+
+                    foreach (var p in workshopAssets)
+                    {
+                        DebugUtils.Log($"[DEBUGGER] - sign name = {p.name}.");
                     }
                 }
                 //  Vanilla props:
