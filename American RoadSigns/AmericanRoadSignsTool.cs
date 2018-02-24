@@ -34,7 +34,7 @@ namespace AmericanRoadSigns
 
         //  'Reference Library' Members:
         //  Included assets and textures:
-        public static string[] IncludedDependencies = new string[] {
+        public static string[] USRoadsignsDependencies = new string[] {
             "motorway-overroad-signs.dds",
             "motorway-overroad-signs-motorway-overroad-signs-aci.dds",
             "motorway-overroad-signs-motorway-overroad-signs-xys.dds",
@@ -49,6 +49,23 @@ namespace AmericanRoadSigns
             "us no right turn.crp",
             "us no parking.crp"
         };
+
+        //public static string[] UKRoadsignsDependencies = new string[] {
+        //    "motorway-overroad-signs.dds",
+        //    "motorway-overroad-signs-motorway-overroad-signs-aci.dds",
+        //    "motorway-overroad-signs-motorway-overroad-signs-xys.dds",
+        //    "street-name-sign.dds",
+        //    "speed limit 15.crp",
+        //    "speed limit 25.crp",
+        //    "speed limit 30.crp",
+        //    "speed limit 45.crp",
+        //    "speed limit 65.crp",
+        //    "us interstate sign.crp",
+        //    "us no left turn.crp",
+        //    "us no right turn.crp",
+        //    "us no parking.crp"
+        //};
+
         //  Highway Networks:
         public static string[] HighwayNetworksWithoutManholes = new string[] {
             "1242750637.HighwayRampElevated1", // Highways
@@ -119,6 +136,7 @@ namespace AmericanRoadSigns
             "Two Lane Highway Twoway Tunnel",
             "Two Lane Highway Twoway"
         };
+
         //  Elevated/Bridge Networks:
         public static string[] RoadNetworksWithoutManholes = new string[] {
             "Eight-Lane Avenue Bridge", // Regular Roads
@@ -290,6 +308,9 @@ namespace AmericanRoadSigns
                 {
                     //  Load config:
                     config = Configuration.Load(fileName);
+                    //  Save config file so in case of new properties, they will be added with default values:
+                    SaveConfig();
+
                     if (config.enable_debug)
                     {
                         DebugUtils.Log($"OnSettingsUI: configuration loaded (file name: {fileName}).");
@@ -369,7 +390,7 @@ namespace AmericanRoadSigns
         public static bool CheckProps(string path)
         {
             bool dependenciesPresent = true;
-            foreach (var IncludedDependency in IncludedDependencies)
+            foreach (var IncludedDependency in USRoadsignsDependencies)
             {
                 if (File.Exists(path + "\\" + IncludedDependency))
                 {
@@ -550,21 +571,19 @@ namespace AmericanRoadSigns
         //  OnLoad:
         public static void ReplacePropsOnLoad()
         {
-            CustomizableRoadsignItem affectedGantrySign = CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "motorway overroad signs").FirstOrDefault();
-            ChangeRoadsignPropWithoutCustomAsset(affectedGantrySign, config.rendermode_highwaygantry);
-
+            //  Replace:
             List<CustomizableRoadsignItem> affectedHighwaySign = new List<CustomizableRoadsignItem>();
             affectedHighwaySign.Add(CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "motorway sign").FirstOrDefault());
-            ChangeRoadsignPropWithCustomAsset(affectedHighwaySign, config.rendermode_highwaysign, false);
+            ChangeRoadsignPropWithCustomAsset(affectedHighwaySign);
 
             List<CustomizableRoadsignItem> affectedNoparkingSign = new List<CustomizableRoadsignItem>();
             affectedNoparkingSign.Add(CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "no parking sign").FirstOrDefault());
-            ChangeRoadsignPropWithCustomAsset(affectedNoparkingSign, config.rendermode_noparking, false);
+            ChangeRoadsignPropWithCustomAsset(affectedNoparkingSign);
 
             List<CustomizableRoadsignItem> affectedNoturningSigns = new List<CustomizableRoadsignItem>();
             affectedNoturningSigns.Add(CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "no left turn sign").FirstOrDefault());
             affectedNoturningSigns.Add(CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "no right turn sign").FirstOrDefault());
-            ChangeRoadsignPropWithCustomAsset(affectedNoturningSigns, config.rendermode_noturnings, false);
+            ChangeRoadsignPropWithCustomAsset(affectedNoturningSigns);
 
             List<CustomizableRoadsignItem> affectedSpeedlimitSigns = new List<CustomizableRoadsignItem>();
             affectedSpeedlimitSigns.Add(CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "30 speed limit").FirstOrDefault());
@@ -572,10 +591,103 @@ namespace AmericanRoadSigns
             affectedSpeedlimitSigns.Add(CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "50 speed limit").FirstOrDefault());
             affectedSpeedlimitSigns.Add(CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "60 speed limit").FirstOrDefault());
             affectedSpeedlimitSigns.Add(CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "100 speed limit").FirstOrDefault());
-            ChangeRoadsignPropWithCustomAsset(affectedSpeedlimitSigns, config.rendermode_speedlimits, false);
+            ChangeRoadsignPropWithCustomAsset(affectedSpeedlimitSigns);
+        }
 
-            CustomizableRoadsignItem affectedStreetnameSign = CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "street name sign").FirstOrDefault();
-            ChangeRoadsignPropWithoutCustomAsset(affectedStreetnameSign, config.rendermode_streetname);
+        public static void RetexturePropsOnLoad()
+        {
+            var prop_collections = FindObjectsOfType<PropCollection>();
+            //  Roadside props:
+            foreach (var pc in prop_collections)
+            {
+                foreach (var prefab in pc.m_prefabs)
+                {
+                    var prefabName = prefab.name;
+                    //  config.rendermode_x: 0 = American, 1 = Vanilla, 2 = Hide:
+
+                    //  Highway gantry:
+                    if (prefabName.ToLower().Equals("motorway overroad signs"))
+                    {
+                        RetextureRoadSignProp(prefabName, config.rendermode_highwaygantry_usealt);
+                        ////  Custom:
+                        ////var tex = new Texture2D (1, 1);
+                        ////tex.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs.png")));
+                        ////prefab.m_material.mainTexture = tex;
+                        ////  Global:
+                        //if (config.rendermode_highwaygantry_usealt)
+                        //{
+                        //    prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-alt.dds")));
+                        //}
+                        //else
+                        //{
+                        //    prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs.dds")));
+                        //}
+                        //prefab.m_material.SetTexture("_ACIMap", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-motorway-overroad-signs-aci.dds")));
+                        //prefab.m_material.SetTexture("_XYSMap", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-motorway-overroad-signs-xys.dds")));
+                        //prefab.m_lodRenderDistance = 100000;
+                        //prefab.m_lodMesh = null;
+                        //prefab.RefreshLevelOfDetail();
+                        //if (config.enable_debug)
+                        //{
+                        //    DebugUtils.Log("Motorway overhead sign props retextured successfully.");
+                        //}
+                    }
+                    //  Street name sign:
+                    else if (prefabName.ToLower().Equals("motorway sign"))
+                    {
+                        //RetextureRoadSignProp(prefabName, false);
+                        //prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "street-name-sign.dds")));
+                        //prefab.m_lodRenderDistance = 100000;
+                        //prefab.m_lodMesh = null;
+                        //prefab.RefreshLevelOfDetail();
+                        //if (config.enable_debug)
+                        //{
+                        //    DebugUtils.Log("Street name sign props retextured successfully.");
+                        //}
+                    }
+                    //  Street name sign:
+                    else if (prefabName.ToLower().Equals("street name sign"))
+                    {
+                        RetextureRoadSignProp(prefabName, false);
+                        //prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "street-name-sign.dds")));
+                        //prefab.m_lodRenderDistance = 100000;
+                        //prefab.m_lodMesh = null;
+                        //prefab.RefreshLevelOfDetail();
+                        //if (config.enable_debug)
+                        //{
+                        //    DebugUtils.Log("Street name sign props retextured successfully.");
+                        //}
+                    }
+                }
+            }
+        }
+
+        public static void HidePropsOnLoad()
+        {
+            if (!config.enable_gantrysigns)
+            {
+                ChangeRoadsignPropVisibility("gantry", config.enable_gantrysigns);
+            }
+            if (!config.enable_highwaysigns)
+            {
+                ChangeRoadsignPropVisibility("highway", config.enable_highwaysigns);
+            }
+            if (!config.enable_noparkingsigns)
+            {
+                ChangeRoadsignPropVisibility("noparking", config.enable_noparkingsigns);
+            }
+            if (!config.enable_turningsigns)
+            {
+                ChangeRoadsignPropVisibility("turning", config.enable_turningsigns);
+            }
+            if (!config.enable_speedlimitsigns)
+            {
+                ChangeRoadsignPropVisibility("speedlimit", config.enable_speedlimitsigns);
+            }
+            if (!config.enable_streetnamesigns)
+            {
+                ChangeRoadsignPropVisibility("streetname", config.enable_streetnamesigns);
+            }
         }
 
         public static void ChangePropsOnLoad()
@@ -587,74 +699,8 @@ namespace AmericanRoadSigns
                 foreach (var prefab in pc.m_prefabs)
                 {
                     var prefabName = prefab.name.ToLower();
-                    //  config.rendermode_x: 0 = American, 1 = Vanilla, 2 = Hide:
-
-                    //  Highway gantry:
-                    if (prefabName.Equals("motorway overroad signs"))
-                    {
-                        if (config.rendermode_highwaygantry == 0)
-                        {
-                            //  Custom:
-                            //var tex = new Texture2D (1, 1);
-                            //tex.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs.png")));
-                            //prefab.m_material.mainTexture = tex;
-                            //  Global:
-                            if (config.rendermode_highwaygantry_usealt)
-                            {
-                                prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-alt.dds")));
-                            }
-                            else
-                            {
-                                prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs.dds")));
-                            }
-                            prefab.m_material.SetTexture("_ACIMap", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-motorway-overroad-signs-aci.dds")));
-                            prefab.m_material.SetTexture("_XYSMap", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-motorway-overroad-signs-xys.dds")));
-                            prefab.m_lodRenderDistance = 100000;
-                            prefab.m_lodMesh = null;
-                            prefab.RefreshLevelOfDetail();
-                            if (config.enable_debug)
-                            {
-                                DebugUtils.Log("Motorway overhead sign props retextured successfully.");
-                            }
-                        }
-                        else if (config.rendermode_highwaygantry == 2)
-                        {
-                            prefab.m_maxRenderDistance = 0;
-                            prefab.m_maxScale = 0;
-                            prefab.m_minScale = 0;
-                            if (config.enable_debug)
-                            {
-                                DebugUtils.Log("Motorway overhead sign props hidden successfully.");
-                            }
-                        }
-                    }
-                    //  Street name sign:
-                    else if (prefabName.Equals("street name sign"))
-                    {
-                        if (config.rendermode_streetname == 0)
-                        {
-                            prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "street-name-sign.dds")));
-                            prefab.m_lodRenderDistance = 100000;
-                            prefab.m_lodMesh = null;
-                            prefab.RefreshLevelOfDetail();
-                            if (config.enable_debug)
-                            {
-                                DebugUtils.Log("Street name sign props retextured successfully.");
-                            }
-                        }
-                        else if (config.rendermode_streetname == 2)
-                        {
-                            prefab.m_maxRenderDistance = 0;
-                            prefab.m_maxScale = 0;
-                            prefab.m_minScale = 0;
-                            if (config.enable_debug)
-                            {
-                                DebugUtils.Log("Street name sign props hidden successfully.");
-                            }
-                        }
-                    }
                     //  Street props:
-                    else if ((prefabName.Equals("electricity box") && !config.enable_streetprops_electricitybox) ||
+                    if ((prefabName.Equals("electricity box") && !config.enable_streetprops_electricitybox) ||
                             (prefabName.Equals("fire hydrant") && !config.enable_streetprops_firehydrant) ||
                             (prefabName.Equals("info terminal") && !config.enable_streetprops_infoterminal) ||
                             (prefabName.Equals("parking meter") && !config.enable_streetprops_parkingmeter) ||
@@ -764,145 +810,36 @@ namespace AmericanRoadSigns
 
         //  ROAD SIGN PROPS:
         //  Handler for road sign props with custom model (replace/hide):
-        public static void ChangeRoadsignPropWithCustomAsset(List<CustomizableRoadsignItem> affectedSigns, int selectedValue, bool addAction = true)
+        public static void ChangeRoadsignPropWithCustomAsset(List<CustomizableRoadsignItem> affectedSigns)
         {
-            var roadNetworks = FindObjectsOfType<NetCollection>();
+            var prop_collections = FindObjectsOfType<PropCollection>();
             //  
             Stopwatch ReplacePropsTimer = new Stopwatch();
             ReplacePropsTimer.Start();
-            //  Do the magic:
-            if (addAction)
-            {   //  InGame, so add action to SimulationManager (huge performance boost):
-                SimulationManager.instance.AddAction(() =>
+            //  
+            foreach (var affectedSign in affectedSigns)
+            {
+                foreach (var pc in prop_collections)
                 {
-                    if (selectedValue < 2)
-                    {   //  Show vanilla/custom:
-                        foreach (var roadNetwork in roadNetworks)
-                        {
-                            //  Loop Prefabs:
-                            foreach (var prefab in roadNetwork.m_prefabs)
-                            {
-                                //  Loop lanes if present:
-                                if (prefab.m_lanes == null || prefab.m_lanes.Count() == 0)
-                                {
-                                    continue;
-                                }
-                                foreach (var lane in prefab.m_lanes)
-                                {
-                                    if (lane?.m_laneProps?.m_props == null)
-                                    {
-                                        continue;
-                                    }
-                                    foreach (var affectedSign in affectedSigns)
-                                    {
-                                        ReplaceRoadsignProp(lane.m_laneProps, affectedSign, selectedValue);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {   //  Hide
-                        foreach (var roadNetwork in roadNetworks)
-                        {
-                            //  Loop Prefabs:
-                            foreach (var prefab in roadNetwork.m_prefabs)
-                            {
-                                //  Loop lanes if present:
-                                if (prefab.m_lanes == null || prefab.m_lanes.Count() == 0)
-                                {
-                                    continue;
-                                }
-                                foreach (var lane in prefab.m_lanes)
-                                {
-                                    if (lane?.m_laneProps?.m_props == null)
-                                    {
-                                        continue;
-                                    }
-                                    //  Loop LaneProps:
-                                    lane.m_laneProps.m_props.ForEach(
-                                        x =>
-                                        {
-                                            if (x.m_prop != null)
-                                            {
-                                                affectedSigns.ForEach(y =>
-                                                {
-                                                    if (x.m_prop.name == y._originalSign.name || x.m_prop.name == y._customSign.name)
-                                                    {
-                                                        HideRoadsignProp(x);
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    );
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-            else
-            {   //  OnLoad, so do not add action to SimulationManager (not available):
-                if (selectedValue < 2)
-                {   //  Show vanilla/custom:
-                    foreach (var roadNetwork in roadNetworks)
+                    foreach (var prefab in pc.m_prefabs)
                     {
-                        //  Loop Prefabs:
-                        foreach (var prefab in roadNetwork.m_prefabs)
+                        var prefabName = prefab.name.ToLower();
+                        if (prefabName == affectedSign._originalSign.name.ToLower())
                         {
-                            //  Loop lanes if present:
-                            if (prefab.m_lanes == null || prefab.m_lanes.Count() == 0)
+                            //  Show:
+                            prefab.m_mesh = affectedSign._customSign.m_mesh;
+                            prefab.m_material = affectedSign._customSign.m_material;
+                            prefab.m_Atlas = affectedSign._customSign.m_Atlas;
+                            //  
+                            prefab.m_maxRenderDistance = 1000;
+                            prefab.m_maxScale = 1;
+                            prefab.m_minScale = 1;
+                            prefab.m_lodRenderDistance = 100000;
+                            prefab.m_lodMesh = null;
+                            prefab.RefreshLevelOfDetail();
+                            if (config.enable_debug)
                             {
-                                continue;
-                            }
-                            foreach (var lane in prefab.m_lanes)
-                            {
-                                if (lane?.m_laneProps?.m_props == null)
-                                {
-                                    continue;
-                                }
-                                foreach (var affectedSign in affectedSigns)
-                                {
-                                    ReplaceRoadsignProp(lane.m_laneProps, affectedSign, selectedValue);
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {   //  Hide
-                    foreach (var roadNetwork in roadNetworks)
-                    {
-                        //  Loop Prefabs:
-                        foreach (var prefab in roadNetwork.m_prefabs)
-                        {
-                            //  Loop lanes if present:
-                            if (prefab.m_lanes == null || prefab.m_lanes.Count() == 0)
-                            {
-                                continue;
-                            }
-                            foreach (var lane in prefab.m_lanes)
-                            {
-                                if (lane?.m_laneProps?.m_props == null)
-                                {
-                                    continue;
-                                }
-                                //  Loop LaneProps:
-                                lane.m_laneProps.m_props.ForEach(
-                                    x =>
-                                    {
-                                        if (x.m_prop != null)
-                                        {
-                                            affectedSigns.ForEach(y =>
-                                            {
-                                                if (x.m_prop.name == y._originalSign.name || x.m_prop.name == y._customSign.name)
-                                                {
-                                                    HideRoadsignProp(x);
-                                                }
-                                            });
-                                        }
-                                    }
-                                );
+                                DebugUtils.Log($"{prefab.name} replaced successfully.");
                             }
                         }
                     }
@@ -912,41 +849,80 @@ namespace AmericanRoadSigns
             ReplacePropsTimer.Stop();
             if (config.enable_debug)
             {
-                if (selectedValue < 2)
-                {
-                    DebugUtils.Log($"Road sign(s) replaced with {((selectedValue == 0) ? "custom" : "vanilla")} model succesfully. Operation took {ReplacePropsTimer.ElapsedMilliseconds} ms.");
-                }
-                else
-                {
-                    DebugUtils.Log($"Road sign(s) hidden succesfully. Operation took {ReplacePropsTimer.ElapsedMilliseconds} ms.");
-                }
+                DebugUtils.Log($"Road sign props replaced succesfully. Operation took {ReplacePropsTimer.ElapsedMilliseconds} ms.");
             }
         }
 
         //  Handler for road sign props without custom model (retexture/hide):
-        public static void ChangeRoadsignPropWithoutCustomAsset(CustomizableRoadsignItem affectedSign, int selectedValue)
+        public static void ChangeRoadsignPropVisibility(string affectedSign, bool isVisible, bool addAction = false)
         {
-            DebugUtils.Log($"[DEBUG] - original prop {affectedSign._originalSign.name} to be retextured.");
+            DebugUtils.Log($"[DEBUGGER] - Change visibility to visible: {isVisible}");
 
-            PropInfo affectedSignProp = affectedSign._originalSign;
+            //PropInfo affectedSignProp = new PropInfo();
+            List<PropInfo> affectedSignProps = new List<PropInfo>();
+            if (affectedSign == "gantry")
+            {
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("Motorway Overroad Signs"));
+            }
+            else if (affectedSign == "highway")
+            {
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("Motorway Sign"));
+            }
+            else if (affectedSign == "noparking")
+            {
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("No Parking Sign"));
+            }
+            else if (affectedSign == "turning")
+            {
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("No Left Turn Sign"));
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("No Right Turn Sign"));
+            }
+            else if (affectedSign == "speedlimit")
+            {
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("100 Speed Limit"));
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("60 Speed Limit"));
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("50 Speed Limit"));
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("40 Speed Limit"));
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("30 Speed Limit"));
+            }
+            else if (affectedSign == "streetname")
+            {
+                affectedSignProps.Add(PrefabCollection<PropInfo>.FindLoaded("Street Name Sign"));
+            }
             //  
             string message = string.Empty;
             Stopwatch ReplacePropsTimer = new Stopwatch();
-            ReplacePropsTimer.Start();
-            //  Do the magic:
-            if (selectedValue < 2)
-            {   //  Show
-                RetextureRoadsignProp(affectedSignProp, selectedValue);
-                message = $"Road sign '{affectedSignProp.name}' retextured to {((selectedValue == 0) ? "custom" : "vanilla")} succesfully.";
+
+            if (addAction)
+            {
+                //  InGame, so add action to SimulationManager (huge performance boost):
+                SimulationManager.instance.AddAction(() =>
+                {
+                    DebugUtils.Log($"[DEBUGGER] - addAction");
+                    DebugUtils.Log($"[DEBUGGER] - number of prefabs affected: {affectedSignProps.Count}");
+                    foreach (PropInfo prefab in affectedSignProps)
+                    {
+                        prefab.m_maxRenderDistance = (isVisible) ? 1000 : 0;
+                        prefab.m_maxScale = (isVisible) ? 1 : 0;
+                        prefab.m_minScale = (isVisible) ? 1 : 0;
+                        message += $"Road sign '{prefab.name}' {(isVisible ? "unhidden" : "hidden")} successfully.\n";
+                    }
+                });
             }
             else
-            {   //  Hide
-                affectedSignProp.m_maxRenderDistance = 0;
-                affectedSignProp.m_maxScale = 0;
-                affectedSignProp.m_minScale = 0;
-                message = $"Road sign '{affectedSignProp.name}' hidden successfully.";
+            {
+                DebugUtils.Log($"[DEBUGGER] - not addAction");
+                DebugUtils.Log($"[DEBUGGER] - number of prefabs affected: {affectedSignProps.Count}");
+                //  OnLoad, do not use SimulationManager (not available at this point):
+                foreach (PropInfo prefab in affectedSignProps)
+                {
+                    prefab.m_maxRenderDistance = (isVisible) ? 1000 : 0;
+                    prefab.m_maxScale = (isVisible) ? 1 : 0;
+                    prefab.m_minScale = (isVisible) ? 1 : 0;
+                    message += $"Road sign '{prefab.name}' {(isVisible ? "unhidden" : "hidden")} successfully.\n";
+                }
             }
-            //  
+
             ReplacePropsTimer.Stop();
             message += $" Operation took {ReplacePropsTimer.ElapsedMilliseconds} ms.";
             if (config.enable_debug)
@@ -955,141 +931,67 @@ namespace AmericanRoadSigns
             }
         }
 
-        //  Replace road sign prop x with road sign prop y:
-        public static void ReplaceRoadsignProp(NetLaneProps affectedProps, CustomizableRoadsignItem affectedSign, int selectedValue)
+        //  Handler for road sign props:
+        public static void RetextureRoadSignProp(string prefabName, bool useCustomTexture)
         {
-            //  Init:
-            PropInfo oldProp = (selectedValue == 0) ? PrefabCollection<PropInfo>.FindLoaded(affectedSign._originalSign.name) : PrefabCollection<PropInfo>.FindLoaded(affectedSign._customSign.name);
-            PropInfo newProp = (selectedValue == 0) ? PrefabCollection<PropInfo>.FindLoaded(affectedSign._customSign.name) : PrefabCollection<PropInfo>.FindLoaded(affectedSign._originalSign.name);
-            //  Null check:
-            if (!newProp)
-            {
-                return;
-            }
-            foreach (var prop in affectedProps.m_props)
-            {
-                if (prop.m_prop != null)
-                {
-                    var propInstance = prop.m_finalProp;
-                    if (propInstance == null)
-                    {
-                        continue;
-                    }
-                    if (propInstance.name == oldProp.name || propInstance.name == newProp.name)
-                    {
-                        //  Make visible:
-                        prop.m_prop.m_maxRenderDistance = 1000;
-                        prop.m_prop.m_maxScale = 1;
-                        prop.m_prop.m_minScale = 1;
-                        prop.m_finalProp = newProp;
-                        prop.m_prop = newProp;
-                    }
-                }
-            }
-        }
-
-        //  Hide road sign prop:
-        public static void HideRoadsignProp(NetLaneProps.Prop prop)
-        {
-            if (prop.m_prop == null)
-            {
-                return;
-            }
-
-            PropInfo affectedProp = prop.m_prop;
-            affectedProp.m_maxRenderDistance = 0;
-            affectedProp.m_maxScale = 0;
-            affectedProp.m_minScale = 0;
-            if (config.enable_debug)
-            {
-                DebugUtils.Log($"{affectedProp.name} hidden successfully.");
-            }
-        }
-
-        //  Retexture road sign prop:
-        public static void RetextureRoadsignProp(PropInfo affectedProp, int selectedValue)
-        {
+            PropInfo affectedProp = PrefabCollection<PropInfo>.FindLoaded(prefabName);
             var prop_collections = FindObjectsOfType<PropCollection>();
             //  Roadside props:
             foreach (var pc in prop_collections)
             {
                 foreach (var prefab in pc.m_prefabs)
                 {
-                    var prefabName = prefab.name.ToLower();
+                    prefabName = prefab.name.ToLower();
                     //  Highway gantry:
                     if (prefabName == affectedProp.name.ToLower() && affectedProp.name.ToLower() == "motorway overroad signs")
                     {
-                        //  Show
-                        prefab.m_maxRenderDistance = 1000;
-                        prefab.m_maxScale = 1;
-                        prefab.m_minScale = 1;
-                        if (selectedValue == 0)
-                        {   //  Set to custom
-                            //var tex = new Texture2D (1, 1);
-                            //tex.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs.png")));
-                            //prefab.m_material.mainTexture = tex;
-                            //  Global:
-                            if (config.rendermode_highwaygantry_usealt)
-                            {
-                                prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-alt.dds")));
-                                var meh = prefab.m_material.GetTexture("_MainTex");
-                            }
-                            else
-                            {
-                                prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs.dds")));
-                            }
-                            prefab.m_material.SetTexture("_ACIMap", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-motorway-overroad-signs-aci.dds")));
-                            prefab.m_material.SetTexture("_XYSMap", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-motorway-overroad-signs-xys.dds")));
-                            if (config.enable_debug)
-                            {
-                                DebugUtils.Log($"Motorway overhead sign props retextured to {((config.rendermode_highwaygantry_usealt) ? "alternative " : "standard ")} custom successfully.");
-                            }
+                        //var tex = new Texture2D (1, 1);
+                        //tex.LoadImage (System.IO.File.ReadAllBytes (Path.Combine (textureDir, "motorway-overroad-signs.png")));
+                        //prefab.m_material.mainTexture = tex;
+                        if (useCustomTexture)
+                        {
+                            prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-alt.dds")));
+                            var meh = prefab.m_material.GetTexture("_MainTex");
                         }
                         else
-                        {   //  Reset to vanilla
-                            prefab.m_material.SetTexture("_MainTex", gantryMainTexture);
-                            prefab.m_material.SetTexture("_ACIMap", gantryACITexture);
-                            prefab.m_material.SetTexture("_XYSMap", gantryXYSTexture);
-                            if (config.enable_debug)
-                            {
-                                DebugUtils.Log("Motorway overhead sign props retextured to vanilla successfully.");
-                            }
+                        {
+                            prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs.dds")));
                         }
+                        prefab.m_material.SetTexture("_ACIMap", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-motorway-overroad-signs-aci.dds")));
+                        prefab.m_material.SetTexture("_XYSMap", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-overroad-signs-motorway-overroad-signs-xys.dds")));
                         prefab.m_lodRenderDistance = 100000;
                         prefab.m_lodMesh = null;
                         prefab.RefreshLevelOfDetail();
+                        if (config.enable_debug)
+                        {
+                            DebugUtils.Log($"Motorway overhead sign props retextured to {((config.rendermode_highwaygantry_usealt) ? "alternative " : "standard ")} custom successfully.");
+                        }
                     }
-                    //  Street name sign:
+                    else if (prefabName == affectedProp.name.ToLower() && affectedProp.name.ToLower() == "motorway sign")
+                    {
+                        prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "motorway-sign-alt.dds")));
+                        prefab.m_lodRenderDistance = 100000;
+                        prefab.m_lodMesh = null;
+                        prefab.RefreshLevelOfDetail();
+                        if (config.enable_debug)
+                        {
+                            DebugUtils.Log("Highway sign props retextured successfully.");
+                        }
+                    }
                     else if (prefabName == affectedProp.name.ToLower() && affectedProp.name.ToLower() == "street name sign")
                     {
-                        //  Show
-                        prefab.m_maxRenderDistance = 1000;
-                        prefab.m_maxScale = 1;
-                        prefab.m_minScale = 1;
-                        if (selectedValue == 0)
-                        {   //  Set to custom
-                            prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "street-name-sign.dds")));
-                            if (config.enable_debug)
-                            {
-                                DebugUtils.Log("Street name sign props retextured to custom successfully.");
-                            }
-                        }
-                        else
-                        {   //  Reset to vanilla
-                            prefab.m_material.SetTexture("_MainTex", streetnameMainTexture);
-                            if (config.enable_debug)
-                            {
-                                DebugUtils.Log("Street name sign props retextured to vanilla successfully.");
-                            }
-                        }
+                        prefab.m_material.SetTexture("_MainTex", TextureUtils.LoadTextureDDS(Path.Combine(ModPath, "street-name-sign.dds")));
                         prefab.m_lodRenderDistance = 100000;
                         prefab.m_lodMesh = null;
                         prefab.RefreshLevelOfDetail();
+                        if (config.enable_debug)
+                        {
+                            DebugUtils.Log("Street name sign props retextured successfully.");
+                        }
                     }
                 }
             }
         }
-
 
         //  ROADSIDE/LANE PROPS:
         //  Show/hide roadside prop:

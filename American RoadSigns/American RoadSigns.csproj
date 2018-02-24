@@ -86,9 +86,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="snippet_custom_railroadcrossings.txt" />
-    <Content Include="street-name-sign.dds">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="street-name-sign.dds" />
   </ItemGroup>
   <ItemGroup>
     <None Include="speed limit 15.crp">

@@ -9,10 +9,10 @@ namespace AmericanRoadSigns.GUI
     {
         private bool isInitialized = false;
 
-        private UIDropDown _gantryDropdown;
-        public UIDropDown gantryDropdown
+        private UICheckBox _gantryCheckbox;
+        public UICheckBox gantryCheckbox
         {
-            get { return _gantryDropdown; }
+            get { return _gantryCheckbox; }
         }
 
         private UICheckBox _textureCheckbox;
@@ -21,34 +21,34 @@ namespace AmericanRoadSigns.GUI
             get { return _textureCheckbox; }
         }
 
-        private UIDropDown _highwayDropdown;
-        public UIDropDown highwayDropdown
+        private UICheckBox _highwayCheckbox;
+        public UICheckBox highwayCheckbox
         {
-            get { return _highwayDropdown; }
+            get { return _highwayCheckbox; }
         }
 
-        private UIDropDown _noparkingDropdown;
-        public UIDropDown noparkingDropdown
+        private UICheckBox _noparkingCheckbox;
+        public UICheckBox noparkingCheckbox
         {
-            get { return _noparkingDropdown; }
+            get { return _noparkingCheckbox; }
         }
 
-        private UIDropDown _turningDropdown;
-        public UIDropDown turningDropdown
+        private UICheckBox _turningCheckbox;
+        public UICheckBox turningCheckbox
         {
-            get { return _turningDropdown; }
+            get { return _turningCheckbox; }
         }
 
-        private UIDropDown _speedlimitDropdown;
-        public UIDropDown speedlimitDropdown
+        private UICheckBox _speedlimitCheckbox;
+        public UICheckBox speedlimitCheckbox
         {
-            get { return _speedlimitDropdown; }
+            get { return _speedlimitCheckbox; }
         }
 
-        private UIDropDown _streetnameDropdown;
-        public UIDropDown streetnameDropdown
+        private UICheckBox _streetnameCheckbox;
+        public UICheckBox streetnameCheckbox
         {
-            get { return _streetnameDropdown; }
+            get { return _streetnameCheckbox; }
         }
 
         private static UIRoadSignsPanel _instance;
@@ -70,37 +70,15 @@ namespace AmericanRoadSigns.GUI
 
         private void SetupControls()
         {
-            //  Highway gantries:
+            //  Highway gantry signs:
             var gantryContainer = UIUtils.CreateFormElement(this, "top");
             gantryContainer.name = "gantryContainer";
-            gantryContainer.relativePosition = new Vector3(0, 23);
-            gantryContainer.autoLayout = false;
-            var gantryLabel = gantryContainer.AddUIComponent<UILabel>();
-            gantryLabel.width = 140f;
-            gantryLabel.relativePosition = new Vector3(5, 0);
-            gantryLabel.text = "Highway gantries";
-            gantryLabel.textColor = new Color(187, 187, 187, 255);
-            gantryLabel.textScale = 0.9f;
-            gantryLabel.padding = new RectOffset(0, 0, 0, 5);
-            _gantryDropdown = UIUtils.CreateStyledDropDown(gantryContainer);
-            _gantryDropdown.name = "gantryDropdown";
-            _gantryDropdown.width = 210f;
-            _gantryDropdown.height = 30f;
-            _gantryDropdown.relativePosition = new Vector3(175, -6);
-            _gantryDropdown.AddItem("American");
-            _gantryDropdown.AddItem("Vanilla");
-            _gantryDropdown.AddItem("Hide");
-            _gantryDropdown.selectedIndex = AmericanRoadsignsTool.config.rendermode_highwaygantry;
-
-            _gantryDropdown.eventSelectedIndexChanged += (c, i) =>
-            {
-                if (!isInitialized)
-                {
-                    return;
-                }
-                DropdownChanged(c, i);
-            };
-
+            _gantryCheckbox = UIUtils.CreateCheckBox(gantryContainer);
+            _gantryCheckbox.relativePosition = new Vector3(5, 17);
+            _gantryCheckbox.label.text = "Highway gantry signs";
+            _gantryCheckbox.isChecked = AmericanRoadsignsTool.config.enable_gantrysigns;
+            _gantryCheckbox.eventCheckChanged += CheckboxChanged;
+            
             //  Alternative highway gantry sign texture:
             var textureContainer = UIUtils.CreateFormElement(this, "center");
             textureContainer.name = "textureContainer";
@@ -109,157 +87,57 @@ namespace AmericanRoadSigns.GUI
             _textureCheckbox.relativePosition = new Vector3(5, 17);
             _textureCheckbox.label.text = "Use alternative gantry texture";
             _textureCheckbox.isChecked = AmericanRoadsignsTool.config.rendermode_highwaygantry_usealt;
-            _textureCheckbox.eventCheckChanged += CheckboxChanged;
+            _textureCheckbox.eventCheckChanged += TextureCheckboxChanged;
 
             //  Highway signs:
             var highwayContainer = UIUtils.CreateFormElement(this, "center");
-            highwayContainer.name = "highwayContainer";
+            highwayContainer.name = "highwaysignContainer";
             highwayContainer.relativePosition = new Vector3(0, 120);
-            highwayContainer.autoLayout = false;
-            var highwayLabel = highwayContainer.AddUIComponent<UILabel>();
-            highwayLabel.width = 140f;
-            highwayLabel.relativePosition = new Vector3(5, 0);
-            highwayLabel.text = "Highway signs";
-            highwayLabel.textColor = new Color(187, 187, 187, 255);
-            highwayLabel.textScale = 0.9f;
-            highwayLabel.padding = new RectOffset(0, 0, 0, 5);
-            _highwayDropdown = UIUtils.CreateStyledDropDown(highwayContainer);
-            _highwayDropdown.name = "highwayDropdown";
-            _highwayDropdown.width = 210f;
-            _highwayDropdown.height = 30f;
-            _highwayDropdown.relativePosition = new Vector3(175, -6);
-            _highwayDropdown.AddItem("American");
-            _highwayDropdown.AddItem("Vanilla");
-            _highwayDropdown.AddItem("Hide");
-            _highwayDropdown.selectedIndex = AmericanRoadsignsTool.config.rendermode_highwaysign;
-            _highwayDropdown.eventSelectedIndexChanged += (c, i) =>
-            {
-                if (!isInitialized)
-                {
-                    return;
-                }
-                DropdownChanged(c, i);
-            };
+            _highwayCheckbox = UIUtils.CreateCheckBox(highwayContainer);
+            _highwayCheckbox.relativePosition = new Vector3(5, 17);
+            _highwayCheckbox.label.text = "Highway signs";
+            _highwayCheckbox.isChecked = AmericanRoadsignsTool.config.enable_highwaysigns;
+            _highwayCheckbox.eventCheckChanged += CheckboxChanged;
 
             //  No parking signs:
             var noparkingContainer = UIUtils.CreateFormElement(this, "center");
             noparkingContainer.name = "noparkingContainer";
             noparkingContainer.relativePosition = new Vector3(0, 170);
-            noparkingContainer.autoLayout = false;
-            var noparkingLabel = noparkingContainer.AddUIComponent<UILabel>();
-            noparkingLabel.width = 140f;
-            noparkingLabel.relativePosition = new Vector3(5, 0);
-            noparkingLabel.text = "No parking signs";
-            noparkingLabel.textColor = new Color(187, 187, 187, 255);
-            noparkingLabel.textScale = 0.9f;
-            noparkingLabel.padding = new RectOffset(0, 0, 0, 5);
-            _noparkingDropdown = UIUtils.CreateStyledDropDown(noparkingContainer);
-            _noparkingDropdown.name = "noparkingDropdown";
-            _noparkingDropdown.width = 210f;
-            _noparkingDropdown.height = 30f;
-            _noparkingDropdown.relativePosition = new Vector3(175, -6);
-            _noparkingDropdown.AddItem("American");
-            _noparkingDropdown.AddItem("Vanilla");
-            _noparkingDropdown.AddItem("Hide");
-            _noparkingDropdown.selectedIndex = AmericanRoadsignsTool.config.rendermode_noparking;
-            _noparkingDropdown.eventSelectedIndexChanged += (c, i) =>
-            {
-                if (!isInitialized)
-                {
-                    return;
-                }
-                DropdownChanged(c, i);
-            };
+            _noparkingCheckbox = UIUtils.CreateCheckBox(noparkingContainer);
+            _noparkingCheckbox.relativePosition = new Vector3(5, 17);
+            _noparkingCheckbox.label.text = "No parking signs";
+            _noparkingCheckbox.isChecked = AmericanRoadsignsTool.config.enable_noparkingsigns;
+            _noparkingCheckbox.eventCheckChanged += CheckboxChanged;
 
-            //  No turning signs:
+            //  Turning signs:
             var turningContainer = UIUtils.CreateFormElement(this, "center");
             turningContainer.name = "turningContainer";
             turningContainer.relativePosition = new Vector3(0, 220);
-            turningContainer.autoLayout = false;
-            var turningLabel = turningContainer.AddUIComponent<UILabel>();
-            turningLabel.width = 140f;
-            turningLabel.relativePosition = new Vector3(5, 0);
-            turningLabel.text = "No turning signs";
-            turningLabel.textColor = new Color(187, 187, 187, 255);
-            turningLabel.textScale = 0.9f;
-            turningLabel.padding = new RectOffset(0, 0, 0, 5);
-            _turningDropdown = UIUtils.CreateStyledDropDown(turningContainer);
-            _turningDropdown.name = "turningDropdown";
-            _turningDropdown.width = 210f;
-            _turningDropdown.height = 30f;
-            _turningDropdown.relativePosition = new Vector3(175, -6);
-            _turningDropdown.AddItem("American");
-            _turningDropdown.AddItem("Vanilla");
-            _turningDropdown.AddItem("Hide");
-            _turningDropdown.selectedIndex = AmericanRoadsignsTool.config.rendermode_noturnings;
-            _turningDropdown.eventSelectedIndexChanged += (c, i) =>
-            {
-                if (!isInitialized)
-                {
-                    return;
-                }
-                DropdownChanged(c, i);
-            };
+            _turningCheckbox = UIUtils.CreateCheckBox(turningContainer);
+            _turningCheckbox.relativePosition = new Vector3(5, 17);
+            _turningCheckbox.label.text = "No turning signs";
+            _turningCheckbox.isChecked = AmericanRoadsignsTool.config.enable_turningsigns;
+            _turningCheckbox.eventCheckChanged += CheckboxChanged;
 
             //  Speed limit signs:
             var speedlimitContainer = UIUtils.CreateFormElement(this, "center");
             speedlimitContainer.name = "speedlimitContainer";
             speedlimitContainer.relativePosition = new Vector3(0, 270);
-            speedlimitContainer.autoLayout = false;
-            var speedlimitLabel = speedlimitContainer.AddUIComponent<UILabel>();
-            speedlimitLabel.width = 140f;
-            speedlimitLabel.relativePosition = new Vector3(5, 0);
-            speedlimitLabel.text = "Speed limit signs";
-            speedlimitLabel.textColor = new Color(187, 187, 187, 255);
-            speedlimitLabel.textScale = 0.9f;
-            speedlimitLabel.padding = new RectOffset(0, 0, 0, 5);
-            _speedlimitDropdown = UIUtils.CreateStyledDropDown(speedlimitContainer);
-            _speedlimitDropdown.name = "speedlimitDropdown";
-            _speedlimitDropdown.width = 210f;
-            _speedlimitDropdown.height = 30f;
-            _speedlimitDropdown.relativePosition = new Vector3(175, -6);
-            _speedlimitDropdown.AddItem("American");
-            _speedlimitDropdown.AddItem("Vanilla");
-            _speedlimitDropdown.AddItem("Hide");
-            _speedlimitDropdown.selectedIndex = AmericanRoadsignsTool.config.rendermode_speedlimits;
-            _speedlimitDropdown.eventSelectedIndexChanged += (c, i) =>
-            {
-                if (!isInitialized)
-                {
-                    return;
-                }
-                DropdownChanged(c, i);
-            };
+            _speedlimitCheckbox = UIUtils.CreateCheckBox(speedlimitContainer);
+            _speedlimitCheckbox.relativePosition = new Vector3(5, 17);
+            _speedlimitCheckbox.label.text = "Speed limit signs";
+            _speedlimitCheckbox.isChecked = AmericanRoadsignsTool.config.enable_speedlimitsigns;
+            _speedlimitCheckbox.eventCheckChanged += CheckboxChanged;
 
             //  Street name signs:
             var streetnameContainer = UIUtils.CreateFormElement(this, "center");
             streetnameContainer.name = "streetnameContainer";
             streetnameContainer.relativePosition = new Vector3(0, 320);
-            streetnameContainer.autoLayout = false;
-            var streetnameLabel = streetnameContainer.AddUIComponent<UILabel>();
-            streetnameLabel.width = 140f;
-            streetnameLabel.relativePosition = new Vector3(5, 0);
-            streetnameLabel.text = "Street name signs";
-            streetnameLabel.textColor = new Color(187, 187, 187, 255);
-            streetnameLabel.textScale = 0.9f;
-            streetnameLabel.padding = new RectOffset(0, 0, 0, 5);
-            _streetnameDropdown = UIUtils.CreateStyledDropDown(streetnameContainer);
-            _streetnameDropdown.name = "_streetnameDropdown";
-            _streetnameDropdown.width = 210f;
-            _streetnameDropdown.height = 30f;
-            _streetnameDropdown.relativePosition = new Vector3(175, -6);
-            _streetnameDropdown.AddItem("American");
-            _streetnameDropdown.AddItem("Vanilla");
-            _streetnameDropdown.AddItem("Hide");
-            _streetnameDropdown.selectedIndex = AmericanRoadsignsTool.config.rendermode_streetname;
-            _streetnameDropdown.eventSelectedIndexChanged += (c, i) =>
-            {
-                if (!isInitialized)
-                {
-                    return;
-                }
-                DropdownChanged(c, i);
-            };
+            _streetnameCheckbox = UIUtils.CreateCheckBox(streetnameContainer);
+            _streetnameCheckbox.relativePosition = new Vector3(5, 17);
+            _streetnameCheckbox.label.text = "Street name signs";
+            _streetnameCheckbox.isChecked = AmericanRoadsignsTool.config.enable_streetnamesigns;
+            _streetnameCheckbox.eventCheckChanged += CheckboxChanged;
         }
 
         private void CheckboxChanged(UIComponent trigger, bool isChecked)
@@ -268,77 +146,58 @@ namespace AmericanRoadSigns.GUI
             {
                 return;
             }
+            DebugUtils.Log($"CheckboxChanged: name = {trigger.name}, visible = {isChecked}.");
             //  
-            if (trigger == _textureCheckbox)
+            if (trigger == _gantryCheckbox)
             {
-                //  Only for Americanized texture:
-                //if (AmericanRoadsignsTool.config.rendermode_highwaygantry != 0)
-                //{
-                //    return;
-                //}
-                AmericanRoadsignsTool.config.rendermode_highwaygantry_usealt = isChecked;
-                CustomizableRoadsignItem affectedSign = AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "motorway overroad signs").FirstOrDefault();
-                AmericanRoadsignsTool.ChangeRoadsignPropWithoutCustomAsset(affectedSign, 0);
-                //  
-                AmericanRoadsignsTool.SaveConfig();
-                //  
-                _gantryDropdown.selectedIndex = 0;
+                AmericanRoadsignsTool.ChangeRoadsignPropVisibility("gantry", isChecked, true);
+                AmericanRoadsignsTool.config.enable_gantrysigns = isChecked;
             }
+            if (trigger == _highwayCheckbox)
+            {
+                AmericanRoadsignsTool.ChangeRoadsignPropVisibility("highway", isChecked, true);
+                AmericanRoadsignsTool.config.enable_highwaysigns = isChecked;
+            }
+            if (trigger == _noparkingCheckbox)
+            {
+                AmericanRoadsignsTool.ChangeRoadsignPropVisibility("noparking", isChecked, true);
+                AmericanRoadsignsTool.config.enable_speedlimitsigns = isChecked;
+            }
+            if (trigger == _turningCheckbox)
+            {
+                AmericanRoadsignsTool.ChangeRoadsignPropVisibility("turning", isChecked, true);
+                AmericanRoadsignsTool.config.enable_turningsigns = isChecked;
+            }
+            if (trigger == _speedlimitCheckbox)
+            {
+                AmericanRoadsignsTool.ChangeRoadsignPropVisibility("speedlimit", isChecked, true);
+                AmericanRoadsignsTool.config.enable_speedlimitsigns = isChecked;
+            }
+            if (trigger == _streetnameCheckbox)
+            {
+                AmericanRoadsignsTool.ChangeRoadsignPropVisibility("streetname", isChecked, true);
+                AmericanRoadsignsTool.config.enable_streetnamesigns = isChecked;
+            }
+            //  
+            AmericanRoadsignsTool.SaveConfig();
         }
-
-        private void DropdownChanged(UIComponent trigger, int selectedValue)
+        
+        private void TextureCheckboxChanged(UIComponent trigger, bool isChecked)
         {
             if (!isInitialized)
             {
                 return;
             }
-            DebugUtils.Log($"DropdownChanged: name = {trigger.name}, selected value is {selectedValue}.");
+            DebugUtils.Log($"CheckboxChanged: name = {trigger.name}, use alternative texture = {isChecked}.");
             //  
-            CustomizableRoadsignItem affectedSign = new CustomizableRoadsignItem();
-            List<CustomizableRoadsignItem> affectedSigns = new List<CustomizableRoadsignItem>();
-            if (trigger == _gantryDropdown)
+            if (trigger == _textureCheckbox)
             {
-                affectedSign = AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "motorway overroad signs").FirstOrDefault();
-                AmericanRoadsignsTool.ChangeRoadsignPropWithoutCustomAsset(affectedSign, selectedValue);
-                AmericanRoadsignsTool.config.rendermode_highwaygantry = selectedValue;
+                CustomizableRoadsignItem affectedSign = AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "motorway overroad signs").FirstOrDefault();
+                AmericanRoadsignsTool.RetextureRoadSignProp("Motorway Overroad Signs", isChecked);
+                AmericanRoadsignsTool.config.rendermode_highwaygantry_usealt = isChecked;
             }
-            else if (trigger == _highwayDropdown)
-            {
-                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "motorway sign").FirstOrDefault());
-                AmericanRoadsignsTool.ChangeRoadsignPropWithCustomAsset(affectedSigns, selectedValue);
-                AmericanRoadsignsTool.config.rendermode_highwaysign = selectedValue;
-            }
-            else if (trigger == _noparkingDropdown)
-            {
-                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "no parking sign").FirstOrDefault());
-                AmericanRoadsignsTool.ChangeRoadsignPropWithCustomAsset(affectedSigns, selectedValue);
-                AmericanRoadsignsTool.config.rendermode_noparking = selectedValue;
-            }
-            else if (trigger == _turningDropdown)
-            {
-                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "no left turn sign").FirstOrDefault());
-                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "no right turn sign").FirstOrDefault());
-                AmericanRoadsignsTool.ChangeRoadsignPropWithCustomAsset(affectedSigns, selectedValue);
-                AmericanRoadsignsTool.config.rendermode_noturnings = selectedValue;
-            }
-            else if (trigger == _speedlimitDropdown)
-            {
-                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "30 speed limit").FirstOrDefault());
-                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "40 speed limit").FirstOrDefault());
-                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "50 speed limit").FirstOrDefault());
-                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "60 speed limit").FirstOrDefault());
-                affectedSigns.Add(AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "100 speed limit").FirstOrDefault());
-                AmericanRoadsignsTool.ChangeRoadsignPropWithCustomAsset(affectedSigns, selectedValue);
-                AmericanRoadsignsTool.config.rendermode_speedlimits = selectedValue;
-            }
-            else if (trigger == _streetnameDropdown)
-            {
-                affectedSign = AmericanRoadsignsTool.CustomizableRoadsignsList.Where(x => x._originalSign.name.ToLower() == "street name sign").FirstOrDefault();
-                AmericanRoadsignsTool.ChangeRoadsignPropWithoutCustomAsset(affectedSign, selectedValue);
-                AmericanRoadsignsTool.config.rendermode_streetname = selectedValue;
-            }
-            //  
             AmericanRoadsignsTool.SaveConfig();
+            //  
         }
     }
 }

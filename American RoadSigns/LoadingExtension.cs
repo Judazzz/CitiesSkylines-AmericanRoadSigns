@@ -35,9 +35,17 @@ namespace AmericanRoadSigns
             AmericanRoadsignsTool.SetModPath();
             //  Init. assets:
             AmericanRoadsignsTool.InitProps();
-            //  Replace/hide props:
-            AmericanRoadsignsTool.ReplacePropsOnLoad();
-            //  Retexture/hide props:
+            //  Localize props?
+            if (AmericanRoadsignsTool.config.roadsignpack > 0)
+            {
+                //  Replace props:
+                AmericanRoadsignsTool.ReplacePropsOnLoad();
+                //  Retexture props:
+                AmericanRoadsignsTool.RetexturePropsOnLoad();
+                //  Set prop visibility:
+                AmericanRoadsignsTool.HidePropsOnLoad();
+            }
+            //  Hide props:
             AmericanRoadsignsTool.ChangePropsOnLoad();
             //  
             base.OnLevelLoaded(mode);

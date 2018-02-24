@@ -7,7 +7,8 @@ namespace AmericanRoadSigns
     public class Mod : IUserMod
     {
         public const ulong workshop_id = 690066392;
-        public const string version = "2.1.1";
+        public const string version = "2.2.0";
+        //  TODO: CHOOSE TYPE OF SIGN IN MOD OPTIONS PANEL, SET VISIBILITY IN-GAME IN UI PANEL
 
         public string Name
         {
@@ -20,6 +21,12 @@ namespace AmericanRoadSigns
         }
 
         //  Select Options:
+        private void OnRoadsignPackChanged(int c)
+        {
+            AmericanRoadsignsTool.config.roadsignpack = c;
+            AmericanRoadsignsTool.SaveConfig();
+        }
+
         private void OnKeyboardShortcutChanged(int c)
         {
             AmericanRoadsignsTool.config.keyboardshortcut = c;
@@ -43,6 +50,11 @@ namespace AmericanRoadSigns
                 group.AddSpace(10);
                 //  Select Options (Road signs):
                 group.AddDropdown("Select your preferred keyboard shortcut for toggling the mod panel", new[] { "Shift + A", "Ctrl + A", "Alt + A" }, AmericanRoadsignsTool.config.keyboardshortcut, OnKeyboardShortcutChanged);
+                group.AddSpace(10);
+                //  Select Options (Road signs):
+                group.AddDropdown("Select the road signs pack you want to use in-game", new[] { "Vanilla", "American" }, AmericanRoadsignsTool.config.roadsignpack, OnRoadsignPackChanged);
+                group.AddSpace(5);
+                group.AddGroup("NOTE: changing the road sign pack you want to use requires a restart of your city.");
                 group.AddSpace(10);
                 //  Toggle Options (Misc.):
                 group.AddCheckbox("Write additional data to debug log", AmericanRoadsignsTool.config.enable_debug, new OnCheckChanged(OnEnableDebugChanged));

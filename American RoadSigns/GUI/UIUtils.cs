@@ -10,10 +10,10 @@ namespace AmericanRoadSigns.GUI
         // So if your are using it for your mod consider thanking me (SamsamTS)
         // Extended Public Transport UI's code helped me a lot so thanks a lot AcidFire
         public static float c_modPanelWidth = 400f;
-        public static float c_modPanelHeight = 625f;
+        public static float c_modPanelHeight = 525f;//625f;
 
         public static float c_modPanelInnerWidth = 390f;
-        public static float c_modPanelInnerHeight = 555f;
+        public static float c_modPanelInnerHeight = 455f;//555f;
 
         public static float c_titleBarWidth = 400f;
         public static float c_titleBarHeight = 36f;
@@ -25,7 +25,7 @@ namespace AmericanRoadSigns.GUI
         public static float c_tabButtonWidth = 194.5f;
         public static float c_tabButtonHeight = 28f;
         public static float c_tabPanelWidth = 390f;
-        public static float c_tabPanelHeight = 555f;
+        public static float c_tabPanelHeight = 455f;//555f;
 
         public static float c_spacing = 5;
 

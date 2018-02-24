@@ -17,6 +17,10 @@ Other than that I haven't noticed any incompatibilities: if you do, please repor
 
 [h1]Most recent updates[/h1]
 [quote]
+[b][i]February 24th, 2018 - v2.2.0[/i][/b]
+- Added support for custom roads introduced by the Mass Transit DLC;
+- Changes the core logic to add "prop pack" support (for possible future non-US custom sign support). Because of this change, it is no longer possible to switch between US and vanilla signs once in-game. This now has to be done in the mod options panel [i]before[/i] loading a city. However, it is still possible to toggle visibility of each sign separately in-game.
+
 [b][i]Febuary 18th, 2018 - v2.1.1[/i][/b]
 - Fixed an issue that caused incorrect road sign props to be loaded (like "60km/h Speed Limit" signs being replaced with Spence's "45 MPH Exit Speed Limit" sign instead of the included "45 MPH Speed Limit" sign).
 
@@ -25,14 +29,6 @@ Other than that I haven't noticed any incompatibilities: if you do, please repor
 - Fixed a critical bug that caused an error when loading a city from in-game;
 - Fixed a critical bug that caused an error when loading a city after returning to main menu;
 - Various minor bug fixed and optimizations.
-
-[b][i]May 6th, 2017 - v2.0.0[/i][/b]
-Feature Update 2.0.0 is a complete overhaul of the mod:
-- All options are now available in-game, and can be accessed through a brandnew mod UI;
-- All options except preferred keyboard shortcut and enabling debug output are no longer available in the options window;
-- All features are now applied in real-time, instead of when your city loads. This means you can change as much as you want, and immedeately see the result in-game;
-- Compatibility with European maps has been restored;
-- Various minor bug fixes and optimizations.
 
 [b]Full update history[/b]
 - [url=http://steamcommunity.com/sharedfiles/filedetails/changelog/690066392]Change log[/url][/quote]
